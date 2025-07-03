@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KNOWLEDGE PORTAL: Connecting talent, colleges, & recruiters!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            padding: 12px 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .logo::before {
+            content: "🎯";
+            margin-right: 8px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.2s;
+        }
+
+        .header-btn:hover {
+            background-color: #f0f0f0;
+        }
+
+        .profile-pic {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Category Cards Grid */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .category-card.internships {
+            background: linear-gradient(135deg, #10b981, #34d399);
+            color: white;
+        }
+
+        .category-card.mentorships {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            color: white;
+        }
+
+        .category-card.jobs {
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            color: white;
+        }
+
+        .category-card.practice {
+            background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+            color: white;
+        }
+
+        .category-card.competitions {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            color: white;
+        }
+
+        .category-card.more {
+            background: linear-gradient(135deg, #ec4899, #f472b6);
+            color: white;
+        }
+
+        .category-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .category-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .category-icon {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            font-size: 30px;
+            opacity: 0.8;
+        }
+
+        /* Pro Badge */
+        .pro-badge {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pro-badge::before {
+            content: "💎";
+            font-size: 20px;
+        }
+
+        /* Who's Using Section */
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #1f2937;
+        }
+
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .user-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        }
+
+        .user-card h3 {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #1f2937;
+        }
+
+        .user-card p {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.4;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* Know How Button */
+        .know-how-btn {
+            background: white;
+            border: 2px solid #e5e7eb;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 30px auto;
+            color: #374151;
+        }
+
+        .know-how-btn:hover {
+            background: #f9fafb;
+            border-color: #d1d5db;
+        }
+
+        /* Industry Veterans */
+        .veterans-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+
+        .veterans-logos {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .company-logo {
+            height: 40px;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+            cursor: pointer;
+        }
+
+        .company-logo:hover {
+            opacity: 1;
+        }
+
+        /* Banner Section */
+        .banner {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #fbbf24);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+
+        .banner h2 {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .banner p {
+            font-size: 16px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* My Activity Section */
+        .activity-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+
+        .activity-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .activity-tab {
+            background: #f3f4f6;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .activity-tab.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .activity-tab:hover:not(.active) {
+            background: #e5e7eb;
+        }
+
+        .view-all-btn {
+            background: none;
+            border: none;
+            color: #2563eb;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            float: right;
+            text-decoration: underline;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        /* Featured Opportunities */
+        .opportunities-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+
+        .opportunities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .opportunity-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .opportunity-card:hover {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .opportunity-badge {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .opportunity-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #1f2937;
+        }
+
+        .opportunity-stats {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .opportunity-stats span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .category-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 15px;
+            }
+
+            .users-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .banner {
+                padding: 30px 20px;
+            }
+
+            .banner h2 {
+                font-size: 24px;
+            }
+
+            .opportunities-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                padding: 0 10px;
+            }
+
+            .veterans-logos {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-actions {
+                gap: 10px;
+            }
+
+            .banner h2 {
+                font-size: 20px;
+            }
+
+            .activity-tabs {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .activity-tab {
+                padding: 8px 15px;
+                font-size: 13px;
+            }
+        }
+
+        /* Animations */
+        .category-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .category-card:nth-child(1) { animation-delay: 0.1s; }
+        .category-card:nth-child(2) { animation-delay: 0.2s; }
+        .category-card:nth-child(3) { animation-delay: 0.3s; }
+        .category-card:nth-child(4) { animation-delay: 0.4s; }
+        .category-card:nth-child(5) { animation-delay: 0.5s; }
+        .category-card:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">KNOWLEDGE PORTAL</div>
+            <div class="header-actions">
+                <button class="header-btn" onclick="showNotification('Messages')">💬</button>
+                <button class="header-btn" onclick="showNotification('Notifications')">🔔</button>
+                <button class="header-btn" onclick="showNotification('Menu')">☰</button>
+                <button class="header-btn" onclick="showNotification('Share')">📤</button>
+                <button class="header-btn" onclick="showNotification('Bookmark')">🔖</button>
+                <button class="header-btn" onclick="showNotification('More Options')">⋮</button>
+                <div class="profile-pic" onclick="showProfile()">A</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Category Cards -->
+        <div class="category-grid">
+            <div class="category-card internships" onclick="navigateToCategory('internships')">
+                <div class="category-icon">📚</div>
+                <div class="category-title">Internships</div>
+                <div class="category-subtitle">Guidance<br>Practical<br>Experience</div>
+            </div>
+            <div class="category-card mentorships" onclick="navigateToCategory('mentorships')">
+                <div class="category-icon">🤝</div>
+                <div class="category-title">Mentorships</div>
+                <div class="category-subtitle">Guidance<br>From Top Mentors</div>
+            </div>
+            <div class="category-card jobs" onclick="navigateToCategory('jobs')">
+                <div class="category-icon">💼</div>
+                <div class="category-title">Jobs</div>
+                <div class="category-subtitle">Explore<br>Diverse Careers</div>
+            </div>
+            <div class="category-card practice" onclick="navigateToCategory('practice')">
+                <div class="category-icon">💻</div>
+                <div class="category-title">Practice</div>
+                <div class="category-subtitle">Refine<br>Skills Daily</div>
+            </div>
+            <div class="category-card competitions" onclick="navigateToCategory('competitions')">
+                <div class="category-icon">🏆</div>
+                <div class="category-title">Competitions</div>
+                <div class="category-subtitle">Battle<br>For Excellence</div>
+            </div>
+            <div class="category-card more" onclick="navigateToCategory('more')">
+                <div class="category-icon">⋯⋯</div>
+                <div class="category-title">More</div>
+                <div class="category-subtitle"></div>
+            </div>
+        </div>
+
+        <!-- Pro Badge -->
+        <div class="pro-badge" onclick="showNotification('KNOWLEDGE PRO FEATURES')">
+            <span>Just Went Knowledge Pro!</span>
+        </div>
+
+        <!-- Who's Using Section -->
+        <section>
+            <h2 class="section-title">Who's using Knowledge?</h2>
+            <div class="users-grid">
+                <div class="user-card" onclick="showUserDetails('student')">
+                    <div class="user-avatar">👨‍🎓</div>
+                    <h3>Student...</h3>
+                    <p>Unlock Your Potential: Showcase Your Talent, Build Resume, Grow and get Hired!</p>
+                </div>
+                <div class="user-card" onclick="showUserDetails('company')">
+                    <div class="user-avatar">👩‍💼</div>
+                    <h3>Company...</h3>
+                    <p>Discover Right Talent! Assess, Engage, and Brand Like Never Before!</p>
+                </div>
+                <div class="user-card" onclick="showUserDetails('college')">
+                    <div class="user-avatar">🏫</div>
+                    <h3>Colleges</h3>
+                    <p>Bridge Academia and Industry: Connect Students with Real-World Opportunities!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Know How Button -->
+        <button class="know-how-btn" onclick="showKnowHow()">Know How ⌄</button>
+
+        <!-- Industry Veterans -->
+        <section class="veterans-section">
+            <h3 style="text-align: center; margin-bottom: 20px; color: #6b7280;">Industry veterans</h3>
+            <p style="text-align: center; margin-bottom: 20px; color: #6b7280;">Trust us</p>
+            <div class="veterans-logos">
+                <div class="company-logo" onclick="showCompanyInfo('Qubits Infotech Solution')" style="background: #e74c3c; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold;">Qubits Infotech Solution</div>
+                <div class="company-logo" onclick="showCompanyInfo('Internshala')" style="background: #3498db; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold;">Internshala</div>
+                <div class="company-logo" onclick="showCompanyInfo('HAL')" style="background: #2ecc71; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold;">HAL</div>
+                <div class="company-logo" onclick="showCompanyInfo('Wipro')" style="background: #9b59b6; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold;">Wipro</div>
+                <div class="company-logo" onclick="showCompanyInfo('Amazon')" style="background: #f39c12; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold;">Amazon</div>
+                <div class="company-logo" onclick="showCompanyInfo('Flipkart')" style="background: #e67e22; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold;">Flipkart</div>
+            </div>
+        </section>
+
+        <!-- Banner -->
+        <div class="banner">
+            <h2>BOOST YOUR KNOWLEDGE</h2>
+            <p>THE UNSKIPPABLE INTERNET CORNER</p>
+            <div style="margin-top: 20px;">
+                <button style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold;" onclick="checkOut()">Check Out Our</button>
+            </div>
+        </div>
+
+        <!-- My Activity -->
+        <div class="activity-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 class="section-title" style="margin: 0;">My Activity</h2>
+                <button class="view-all-btn" onclick="viewAllActivity()">View all →</button>
+            </div>
+            <p style="color: #6b7280; margin-bottom: 20px;">Quickly revisit your recent actions on Unstop and pick up right where you left off.</p>
+            
+            <div class="activity-tabs">
+                <button class="activity-tab active" onclick="switchTab('recently-viewed')">🕒 Recently Viewed</button>
+                <button class="activity-tab" onclick="switchTab('watchlist')">❤ Watchlist</button>
+                <button class="activity-tab" onclick="switchTab('registrations')">👥 Registrations</button>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-icon">🏗</div>
+                <div>
+                    <h4>Engineering...</h4>
+                    <p style="color: #6b7280; font-size: 14px;">Hilton</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured Opportunities -->
+        <div class="opportunities-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div>
+                    <h2 class="section-title" style="margin: 0;">Featured Opportunities 🎯📊</h2>
+                    <p style="color: #6b7280;">Check out the curated opportunities handpicked for you from top organizations.</p>
+                </div>
+                <div>
+                    <button style="background: none; border: none; font-size: 20px; cursor: pointer;" onclick="previousOpportunity()">‹</button>
+                    <button style="background: none; border: none; font-size: 20px; cursor: pointer;" onclick="nextOpportunity()">›</button>
+                </div>
+            </div>
+
+            <div class="opportunities-grid">
+                <div class="opportunity-card" onclick="applyOpportunity('data-science')">
+                    <div class="opportunity-badge">Online</div>
+                    <div class="opportunity-badge" style="background: #dcfce7; color: #166534;">Free</div>
+                    <h3 class="opportunity-title">Decision Science Track - AMEX Campus</h3>
+                    <div class="opportunity-stats">
+                        <span>👥 5,839 Registered</span>
+                        <span>❤</span>
+                    </div>
+                </div>
+
+                <div class="opportunity-card" onclick="applyOpportunity('film-making')">
+                    <div class="opportunity-badge">Online</div>
+                    <div class="opportunity-badge" style="background: #dcfce7; color: #166534;">Free</div>
+                    <h3 class="opportunity-title">Network 18 | Sanjeevani Film Making Challenge</h3>
+                    <div class="opportunity-stats">
+                        <span>👥 29 Registered</span>
+                        <span>❤</span>
+                    </div>
+                </div>
+
+                <div class="opportunity-card" onclick="applyOpportunity('apple-iphone')">
+                    <div class="opportunity-badge">Online</div>
+                    <div class="opportunity-badge" style="background: #dcfce7; color: #166534;">Free</div>
+                    <h3 class="opportunity-title">Win PPIs, Apple iPhone & Exciting Merch</h3>
+                    <div class="opportunity-stats">
+                        <span>👥 1,786 Registered</span>
+                        <span>❤</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Notification function
+        function showNotification(action) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #2563eb;
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.innerHTML = <strong>${action}</strong> clicked!;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => notification.remove(), 300);
+            }, 2000);
+        }
+
+        // Category navigation
+        function navigateToCategory(category) {
+            showNotification(Navigating to ${category.charAt(0).toUpperCase() + category.slice(1)});
+            // Add loading animation
+            const categoryCard = event.currentTarget;
+            const originalContent = categoryCard.innerHTML;
+            categoryCard.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <div class="loading"></div>
+                    <p style="margin-top: 10px;">Loading ${category}...</p>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                categoryCard.innerHTML = originalContent;
+            }, 2000);
+        }
+
+        // Profile function
+        function showProfile() {
+            showNotification('Opening Profile');
+        }
+
+        // User details
+        function showUserDetails(userType) {
+            showNotification(Showing ${userType} details);
+        }
+
+        // Know How function
+        function showKnowHow() {
+            showNotification('Opening Know How guide');
+        }
+
+        // Company info
+        function showCompanyInfo(company) {
+            showNotification(Showing ${company} information);
+        }
+
+        // Check out function
+        function checkOut() {
+            showNotification('Checking out Unhinged content');
+        }
+
+        // Activity functions
+        function viewAllActivity() {
+            showNotification('Viewing all activity');
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.activity-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            showNotification(Switched to ${tabName.replace('-', ' ')});
+        }
+
+        // Opportunity functions
+        function applyOpportunity(opportunity) {
+            showNotification(Applying to ${opportunity} opportunity);
+        }
+
+        function previousOpportunity() {
+            showNotification('Showing previous opportunities');
+        }
+
+        function nextOpportunity() {
+            showNotification('Showing next opportunities');
+        }
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Add smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add intersection observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.6s ease-out';
+                    entry.target.style.opacity = '1';
+                }

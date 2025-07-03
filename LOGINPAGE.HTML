@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Unstop Login Clone</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      background: #f7f9fc;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+    }
+
+    .left {
+      flex: 1;
+      background: #fdd835;
+      padding: 60px 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .left img.main-img {
+      max-width: 300px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+    }
+
+    .left .label-box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .left .label-box h3 {
+      font-weight: 700;
+      font-size: 20px;
+      color: #2c2c2c;
+      margin-bottom: 5px;
+    }
+
+    .left .label-box p {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .profile-icons {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .profile-icons img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+
+    .top-logos {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 6px;
+    }
+
+    .top-logos img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      border-radius: 6px;
+    }
+
+    .right {
+      flex: 1;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      background: white;
+      position: relative;
+    }
+
+    .right h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #222;
+      text-align: center;
+      margin-top: 0;
+    }
+
+    .login-btn,
+    .custom-btn,
+    .input-box input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 15px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .login-btn img,
+    .custom-btn img {
+      width: 20px;
+    }
+
+    .login-btn,
+    .custom-btn {
+      background: #fff;
+      color: #444;
+    }
+
+    .login-btn:hover,
+    .custom-btn:hover {
+      background: #f0f0f0;
+      border-color: #999;
+    }
+
+    .input-box input:focus {
+      outline: none;
+      border-color: #3f51b5;
+    }
+
+    .forgot-password {
+      font-size: 14px;
+      color: #3f51b5;
+      text-align: right;
+      margin-bottom: 20px;
+    }
+
+    .login-main-btn {
+      background-color: #3f51b5;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s ease;
+      padding: 12px;
+      border-radius: 8px;
+    }
+
+    .login-main-btn:hover {
+      background-color: #2c3cb6;
+    }
+
+    .extra-links {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .extra-links a {
+      color: #3f51b5;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .left, .right {
+        flex: none;
+        width: 100%;
+      }
+
+      .left {
+        padding: 40px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left">
+      <div class="profile-icons">
+        <img src="https://randomuser.me/api/portraits/men/5.jpg" alt="">
+        <img src="https://randomuser.me/api/portraits/women/6.jpg" alt="">
+        <img src="https://randomuser.me/api/portraits/men/7.jpg" alt="">
+        <img src="https://randomuser.me/api/portraits/women/8.jpg" alt="">
+      </div>
+      <div class="top-logos">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn">
+      </div>
+      <img src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" class="main-img" alt="Person getting job and enjoying">
+      <div class="label-box">
+        <h3>Knowledge Platform</h3>
+        <p>Learn SQL, get hired at AWS, access 130K+ job opportunities, and explore expert-led mentorships.</p>
+      </div>
+    </div>
+    <div class="right">
+      <h2>Log in</h2>
+
+      <button class="login-btn">
+        <img src="https://cdn-icons-png.flaticon.com/512/281/281764.png" alt="Google Icon" />
+        Login with Google
+      </button>
+
+      <button class="custom-btn">
+        <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn Icon" />
+        Login with LinkedIn
+      </button>
+
+      <div class="input-box">
+        <input type="email" placeholder="Email ID" required />
+      </div>
+      <div class="input-box" style="position: relative;">
+        <input type="password" id="password" placeholder="Enter Your Password" required />
+        <span id="togglePassword" style="position:absolute; right:15px; top:50%; transform:translateY(-50%); cursor:pointer;">
+          <img src="https://cdn-icons-png.flaticon.com/512/709/709612.png" alt="Show Password" width="20" id="eyeIcon"/>
+        </span>
+      </div>
+
+      <div class="forgot-password"><a href="#">Forgot password?</a></div>
+
+      <button class="login-main-btn">Login</button>
+
+      <div class="extra-links">
+        Don't have an account? <a href="#">Sign up</a>
+      </div>
+    </div>
+  </div>
+  <script>
+  const passwordInput = document.getElementById('password');
+  const togglePassword = document.getElementById('togglePassword');
+  const eyeIcon = document.getElementById('eyeIcon');
+  let show = false;
+
+  togglePassword.addEventListener('click', function () {
+    show = !show;
+    passwordInput.type = show ? 'text' : 'password';
+    eyeIcon.src = show
+      ? 'https://cdn-icons-png.flaticon.com/512/709/709612.png' // open eye
+      : 'https://cdn-icons-png.flaticon.com/512/159/159604.png'; // closed eye
+    eyeIcon.alt = show ? 'Hide Password' : 'Show Password';
+  });
+</script>
+</body>
+</html>
