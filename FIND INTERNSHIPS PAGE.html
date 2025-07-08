@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Portal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .sidebar {
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 1px solid #dee2e6;
+            background-color: #ffffff;
+        }
+        .main-content {
+            height: 100vh;
+            overflow-y: auto;
+            padding: 0;
+        }
+        .internship-card {
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+        .internship-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        .internship-card.active {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+        }
+        .detail-section {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section-title {
+            color: #495057;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+        .company-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .stats-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            background-color: #e9ecef;
+            color: #495057;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .perk-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .date-box {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+        .info-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #0d6efd;
+        }
+        .scrollbar-hide {
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e0 #f7fafc;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            width: 6px;
+        }
+        .scrollbar-hide::-webkit-scrollbar-track {
+            background: #f7fafc;
+        }
+        .scrollbar-hide::-webkit-scrollbar-thumb {
+            background-color: #cbd5e0;
+            border-radius: 3px;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                height: auto;
+                max-height: 50vh;
+            }
+            .main-content {
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            <!-- Left Sidebar -->
+            <div class="col-md-4 sidebar scrollbar-hide">
+                <div class="p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">Available Internships</h5>
+                        <span class="badge bg-primary">12 Open</span>
+                    </div>
+                    
+                    <!-- Search Bar -->
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-search"></i></span>
+                            <input type="text" class="form-control" placeholder="Search internships...">
+                        </div>
+                    </div>
+
+                    <!-- Internship Cards -->
+                    <div class="internship-list">
+                        <!-- Community Management Card -->
+                        <div class="card internship-card active" data-internship="community-management">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start mb-2">
+                                    <div class="company-logo me-3">SM</div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="card-title mb-1">Community Management</h6>
+                                        <p class="text-muted mb-2" style="font-size: 0.875rem;">SUP LIVE ENTERTAINMENT</p>
+                                        <div class="d-flex flex-wrap gap-2 mb-2">
+                                            <span class="stats-item">
+                                                <i class="bi bi-people"></i>
+                                                <span>2 Applied</span>
+                                            </span>
+                                            <span class="stats-item">
+                                                <i class="bi bi-clock"></i>
+                                                <span>6 days left</span>
+                                            </span>
+                                        </div>
+                                        <div class="mb-2">
+                                            <span class="tag">Engineering Students</span>
+                                            <span class="tag">MBA Students</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- UI/UX Internship Card -->
+                        <div class="card internship-card" data-internship="uiux-design">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start mb-2">
+                                    <div class="company-logo me-3">MS</div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="card-title mb-1">UI/UX Internship</h6>
+                                        <p class="text-muted mb-2" style="font-size: 0.875rem;">MentorStack</p>
+                                        <div class="d-flex flex-wrap gap-2 mb-2">
+                                            <span class="stats-item">
+                                                <i class="bi bi-people"></i>
+                                                <span>1,208 Applied</span>
+                                            </span>
+                                            <span class="stats-item">
+                                                <i class="bi bi-clock"></i>
+                                                <span>13 days left</span>
+                                            </span>
+                                        </div>
+                                        <div class="mb-2">
+                                            <span class="tag">Engineering Students</span>
+                                            <span class="tag">MBA Students</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Social Media Marketing Card -->
+                        <div class="card internship-card" data-internship="social-media">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start mb-2">
+                                    <div class="company-logo me-3">MS</div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="card-title mb-1">Social Media Marketing</h6>
+                                        <p class="text-muted mb-2" style="font-size: 0.875rem;">MentorStack</p>
+                                        <div class="d-flex flex-wrap gap-2 mb-2">
+                                            <span class="stats-item">
+                                                <i class="bi bi-people"></i>
+                                                <span>2,308 Applied</span>
+                                            </span>
+                                            <span class="stats-item">
+                                                <i class="bi bi-clock"></i>
+                                                <span>2 days left</span>
+                                            </span>
+                                        </div>
+                                        <div class="mb-2">
+                                            <span class="tag">Engineering Students</span>
+                                            <span class="tag">MBA Students</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- HR Operations Card -->
+                        <div class="card internship-card" data-internship="hr-operations">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start mb-2">
+                                    <div class="company-logo me-3">HC</div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="card-title mb-1">HR Operations Internship</h6>
+                                        <p class="text-muted mb-2" style="font-size: 0.875rem;">HRCurve</p>
+                                        <div class="d-flex flex-wrap gap-2 mb-2">
+                                            <span class="stats-item">
+                                                <i class="bi bi-people"></i>
+                                                <span>847 Applied</span>
+                                            </span>
+                                            <span class="stats-item">
+                                                <i class="bi bi-clock"></i>
+                                                <span>2 days left</span>
+                                            </span>
+                                        </div>
+                                        <div class="mb-2">
+                                            <span class="tag">Engineering Students</span>
+                                            <span class="tag">MBA Students</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-8 main-content scrollbar-hide">
+                <div class="p-4">
+                    <div class="detail-section p-4">
+                        <!-- Header -->
+                        <div class="d-flex justify-content-between align-items-start mb-4">
+                            <div class="d-flex align-items-center">
+                                <div class="company-logo me-3">SM</div>
+                                <div>
+                                    <h3 class="mb-1">Community Management</h3>
+                                    <p class="text-muted mb-0">SUP LIVE ENTERTAINMENT</p>
+                                    <small class="text-muted">Updated On: Jul 8, 2025</small>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-outline-primary">
+                                    <i class="bi bi-heart"></i>
+                                </button>
+                                <button class="btn btn-outline-primary">
+                                    <i class="bi bi-share"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Quick Apply Button -->
+                        <div class="mb-4">
+                            <button class="btn btn-primary btn-lg w-100">
+                                <i class="bi bi-send"></i> Quick Apply
+                            </button>
+                        </div>
+
+                        <!-- Application Stats -->
+                        <div class="row mb-4">
+                            <div class="col-sm-6">
+                                <div class="info-card">
+                                    <div class="stats-item">
+                                        <i class="bi bi-clock-history"></i>
+                                        <span><strong>Application Deadline:</strong> 6 days left</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="info-card">
+                                    <div class="stats-item">
+                                        <i class="bi bi-people"></i>
+                                        <span><strong>Impressions:</strong> 825</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Eligibility -->
+                        <div class="mb-4">
+                            <h5 class="section-title">Eligibility</h5>
+                            <div class="d-flex flex-wrap gap-2">
+                                <span class="badge bg-light text-dark">Engineering Students</span>
+                                <span class="badge bg-light text-dark">MBA Students</span>
+                                <span class="badge bg-light text-dark">Undergraduate</span>
+                                <span class="badge bg-light text-dark">Postgraduate</span>
+                            </div>
+                        </div>
+
+                        <!-- About the Internship -->
+                        <div class="mb-4">
+                            <h5 class="section-title">About the Internship</h5>
+                            <div class="mb-3">
+                                <h6>Description:</h6>
+                                <p>The Community Management Intern will support the day-to-day coordination and engagement activities within the organization's online and internal communities. The role involves maintaining effective communication between teams, managing online interactions, and ensuring collaborative functioning across various departments. This is a remote role with part-time hours flexible hours.</p>
+                            </div>
+                        </div>
+
+                        <!-- Responsibilities -->
+                        <div class="mb-4">
+                            <h5 class="section-title">Responsibilities of the Candidate:</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    Manage and engage with online community across various platforms.
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    Coordinate with different teams to ensure smooth collaboration and task alignment.
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    Organize and participate in virtual events, discussions, and campaigns.
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    Identify opportunities to improve community engagement and teamwork efficiency.
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    Maintain a friendly, inclusive, and respectful community environment.
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    Support team communication and help resolve small internal conflicts (if any) proactively.
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Requirements -->
+                        <div class="mb-4">
+                            <h5 class="section-title">Requirements:</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="bi bi-arrow-right-circle text-primary me-2"></i>
+                                    Strong logical reasoning and critical thinking abilities.
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-arrow-right-circle text-primary me-2"></i>
+                                    Good at problem-solving in dynamic team environments.
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-arrow-right-circle text-primary me-2"></i>
+                                    Excellent communication skills – both written and verbal.
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-arrow-right-circle text-primary me-2"></i>
+                                    Comfortable working in and managing team settings.
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-arrow-right-circle text-primary me-2"></i>
+                                    Ability to handle tasks independently while collaborating with others.
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-arrow-right-circle text-primary me-2"></i>
+                                    Open-mindedness, empathy, and willingness to learn.
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Perks & Benefits -->
+                        <div class="mb-4">
+                            <h5 class="section-title">Perks & Benefits:</h5>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="perk-item">
+                                        <i class="bi bi-clock text-success"></i>
+                                        <span>Flexible Working Hours</span>
+                                    </div>
+                                    <div class="perk-item">
+                                        <i class="bi bi-house text-success"></i>
+                                        <span>100% Work-from-Home</span>
+                                    </div>
+                                    <div class="perk-item">
+                                        <i class="bi bi-award text-success"></i>
+                                        <span>Letter of Recommendation & Certificate of Completion</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="perk-item">
+                                        <i class="bi bi-chat-dots text-success"></i>
+                                        <span>Free Counselling & Guidance Support</span>
+                                    </div>
+                                    <div class="perk-item">
+                                        <i class="bi bi-people text-success"></i>
+                                        <span>A Healthy, Supportive & Family-like Work Culture</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Important Dates -->
+                        <div class="mb-4">
+                            <h5 class="section-title">Important dates & deadlines?</h5>
+                            <div class="date-box">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-calendar-date text-primary me-2"></i>
+                                    <div>
+                                        <strong>Application Deadline</strong><br>
+                                        <span class="text-muted">15 Jul 25, 12:00 AM IST</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Information -->
+                        <div class="mb-4">
+                            <h5 class="section-title">Additional Information</h5>
+                            <div class="row">
+                                <div class="col-sm-6 mb-3">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="bi bi-calendar3 text-primary me-2"></i>
+                                        <strong>Internship Duration</strong>
+                                    </div>
+                                    <span class="text-muted">3 months</span>
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="bi bi-laptop text-primary me-2"></i>
+                                        <strong>Internship Type</strong>
+                                    </div>
+                                    <span class="text-muted">Unpaid</span>
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="bi bi-briefcase text-primary me-2"></i>
+                                        <strong>Work Detail</strong>
+                                    </div>
+                                    <span class="text-muted">Working Days: 7 Days</span>
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="bi bi-clock text-primary me-2"></i>
+                                        <strong>Timing</strong>
+                                    </div>
+                                    <span class="text-muted">Internship Type: Work From Home<br>
+                                    Internship Timing: Full Time</span>
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="bi bi-gift text-primary me-2"></i>
+                                        <strong>Perks</strong>
+                                    </div>
+                                    <span class="text-muted">Certificate of Completion<br>
+                                    Letter of Recommendation<br>
+                                    Flexible Hours<br>
+                                    Counselling Support</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Information -->
+                        <div class="mb-4">
+                            <h5 class="section-title">Contact the organisers</h5>
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-envelope text-primary me-2"></i>
+                                <span>Send queries to organisers</span>
+                                <i class="bi bi-arrow-right ms-auto"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast for Application Confirmation -->
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+        <div id="applicationToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                <strong class="me-auto">Application Submitted</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">
+                Your application has been submitted successfully!
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Internship data
+        const internshipData = {
+            'community-management': {
+                title: 'Community Management',
+                company: 'SUP LIVE ENTERTAINMENT',
+                logo: 'SM',
+                applied: '2 Applied',
+                deadline: '6 days left',
+                description: 'The Community Management Intern will support the day-to-day coordination and engagement activities within the organization\'s online and internal communities. The role involves maintaining effective communication between teams, managing online interactions, and ensuring collaborative functioning across various departments. This is a remote role with part-time hours flexible hours.',
+                responsibilities: [
+                    'Manage and engage with online community across various platforms.',
+                    'Coordinate with different teams to ensure smooth collaboration and task alignment.',
+                    'Organize and participate in virtual events, discussions, and campaigns.',
+                    'Identify opportunities to improve community engagement and teamwork efficiency.',
+                    'Maintain a friendly, inclusive, and respectful community environment.',
+                    'Support team communication and help resolve small internal conflicts (if any) proactively.'
+                ]
+            },
+            'uiux-design': {
+                title: 'UI/UX Internship',
+                company: 'MentorStack',
+                logo: 'MS',
+                applied: '1,208 Applied',
+                deadline: '13 days left',
+                description: 'Join our design team to create intuitive and engaging user experiences. You\'ll work on various projects including mobile apps, web platforms, and design systems. This role offers hands-on experience with industry-standard tools and methodologies.',
+                responsibilities: [
+                    'Design user interfaces for web and mobile applications.',
+                    'Conduct user research and usability testing.',
+                    'Create wireframes, prototypes, and design specifications.',
+                    'Collaborate with development teams to ensure design implementation.',
+                    'Participate in design reviews and iterate based on feedback.',
+                    'Maintain design systems and component libraries.'
+                ]
+            },
+            'social-media': {
+                title: 'Social Media Marketing',
+                company: 'MentorStack',
+                logo: 'MS',
+                applied: '2,308 Applied',
+                deadline: '2 days left',
+                description: 'Drive engagement and growth through strategic social media marketing. You\'ll create content, manage campaigns, and analyze performance across multiple platforms. Perfect for creative minds passionate about digital marketing.',
+                responsibilities: [
+                    'Create and curate engaging content for social media platforms.',
+                    'Develop and execute social media marketing campaigns.',
+                    'Monitor social media metrics and prepare performance reports.',
+                    'Engage with followers and respond to comments and messages.',
+                    'Research social media trends and competitor activities.',
+                    'Collaborate with the marketing team on brand messaging.'
+                ]
+            },
+            'hr-operations': {
+                title: 'HR Operations Internship',
+                company: 'HRCurve',
+                logo: 'HC',
+                applied: '847 Applied',
+                deadline: '2 days left',
+                description: 'Support HR operations and gain experience in talent management, employee relations, and HR processes. You\'ll work with recruitment, onboarding, and employee engagement initiatives in a fast-paced environment.',
+                responsibilities: [
+                    'Assist in recruitment processes and candidate screening.',
+                    'Support employee onboarding and orientation programs.',
+                    'Maintain HR databases and employee records.',
+                    'Help organize training sessions and workshops.',
+                    'Assist with performance management activities.',
+                    'Support employee engagement and retention initiatives.'
+                ]
+            }
+        };
+
+        // Handle internship card clicks
+        document.querySelectorAll('.internship-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // Remove active class from all cards
+                document.querySelectorAll('.internship-card').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked card
+                this.classList.add('active');
+                
+                // Get internship data
+                const internshipId = this.dataset.internship;
+                const data = internshipData[internshipId];
+                
+                // Update main content (basic update for demonstration)
+                if (data) {
+                    updateMainContent(data);
+                }
+            });
+        });
+
+        // Basic function to update main content
+        function updateMainContent(data) {
+            // Update header
+            document.querySelector('h3').textContent = data.title;
+            document.querySelector('.text-muted').textContent = data.company;
+            
+            // Update logo
+            document.querySelector('.company-logo').textContent = data.logo;
+            
+            // Update description
+            document.querySelector('.mb-4 p').textContent = data.description;
+            
+            // Update responsibilities
+            const responsibilitiesList = document.querySelector('.list-unstyled');
+            responsibilitiesList.innerHTML = '';
+            data.responsibilities.forEach(responsibility => {
+                const li = document.createElement('li');
+                li.className = 'mb-2';
+                li.innerHTML = `<i class="bi bi-check-circle-fill text-success me-2"></i>${responsibility}`;
+                responsibilitiesList.appendChild(li);
+            });
+        }
+
+        // Handle Quick Apply button
+        document.querySelector('.btn-primary.btn-lg').addEventListener('click', function() {
+            // Show toast notification
+            const toast = new bootstrap.Toast(document.getElementById('applicationToast'));
+            toast.show();
+        });
+
+        // Search functionality
+        document.querySelector('input[placeholder="Search internships..."]').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.internship-card');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('.card-title').textContent.toLowerCase();
+                const company = card.querySelector('.text-muted').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || company.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
