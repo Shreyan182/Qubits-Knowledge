@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Listing & Detail Page</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .event-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .event-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        .event-card.active {
+            border-color: #007bff;
+            background-color: #f8f9ff;
+        }
+        .prize-badge {
+            background: linear-gradient(45deg, #ffd700, #ffed4a);
+            color: #333;
+            font-weight: bold;
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.85rem;
+        }
+        .registered-count {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .days-left {
+            background-color: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+        .event-tag {
+            background-color: #f5f5f5;
+            color: #666;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-right: 5px;
+        }
+        .filter-btn {
+            border: 1px solid #ddd;
+            background: white;
+            color: #333;
+            padding: 8px 16px;
+            margin-right: 8px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        .main-content {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 24px;
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 40px;
+            margin-bottom: 30px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: -30px;
+            width: 2px;
+            background: #e0e0e0;
+        }
+        .timeline-item:last-child::before {
+            display: none;
+        }
+        .timeline-circle {
+            position: absolute;
+            left: 8px;
+            top: 2px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #007bff;
+            color: white;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .contact-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            background: #fafafa;
+        }
+        .prize-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #f8f9ff, #e8f4ff);
+        }
+        .prize-amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .sidebar {
+            height: calc(100vh - 140px);
+            overflow-y: auto;
+            padding-right: 15px;
+        }
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sidebar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 10px;
+        }
+        .register-btn {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            border: none;
+            padding: 12px 40px;
+            border-radius: 25px;
+            font-weight: bold;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,123,255,0.3);
+        }
+        .stat-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            color: #666;
+        }
+        .stat-item i {
+            margin-right: 8px;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><i class="fas fa-trophy text-primary"></i> Knowledge platform</a>
+            <div class="d-flex align-items-center">
+                <div class="input-group me-3" style="width: 300px;">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input type="text" class="form-control" placeholder="Search Opportunities">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Filter Bar -->
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                    <button class="filter-btn active" data-filter="all">
+                        <i class="fas fa-trophy"></i> Competitions
+                    </button>
+                    <button class="filter-btn" data-filter="hackathon">
+                        <i class="fas fa-code"></i> Hackathon
+                    </button>
+                    <button class="filter-btn" data-filter="quiz">
+                        <i class="fas fa-question-circle"></i> Quiz
+                    </button>
+                    <button class="filter-btn" data-filter="workshop">
+                        <i class="fas fa-tools"></i> Workshop
+                    </button>
+                    <button class="filter-btn" data-filter="status">
+                        <i class="fas fa-filter"></i> Status
+                    </button>
+                    <button class="filter-btn" data-filter="domain">
+                        <i class="fas fa-globe"></i> Domain
+                    </button>
+                    <button class="filter-btn" data-filter="category">
+                        <i class="fas fa-tags"></i> Category
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-4 col-md-5">
+                <div class="sidebar">
+                    <!-- Event Card 1 -->
+                    <div class="event-card active" data-event="1">
+                        <div class="d-flex align-items-start">
+                            <div class="me-3">
+                                <i class="fas fa-shield-alt text-primary fa-2x"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">U & ME - HACKATHON</h6>
+                                <small class="text-muted">Edutainr</small>
+                                <div class="d-flex align-items-center mt-2">
+                                    <span class="prize-badge me-2">₹ 18,000</span>
+                                    <span class="registered-count">👥 14 Registered</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <span class="days-left">⏰ 25 days left</span>
+                                    <div>
+                                        <span class="event-tag">Hackathon</span>
+                                        <span class="event-tag">Coding Challenge</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event Card 2 -->
+                    <div class="event-card" data-event="2">
+                        <div class="d-flex align-items-start">
+                            <div class="me-3">
+                                <i class="fas fa-clock text-danger fa-2x"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">HackChrono</h6>
+                                <small class="text-muted">Chandigarh University (CU) MicCell Punjab</small>
+                                <div class="d-flex align-items-center mt-2">
+                                    <span class="prize-badge me-2">₹ 1,50,000</span>
+                                    <span class="registered-count">👥 15 Registered</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <span class="days-left">⏰ 1 month left</span>
+                                    <div>
+                                        <span class="event-tag">Hackathon</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event Card 3 -->
+                    <div class="event-card" data-event="3">
+                        <div class="d-flex align-items-start">
+                            <div class="me-3">
+                                <i class="fas fa-server text-info fa-2x"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">Webinar - Certified Kubernetes Administrator</h6>
+                                <small class="text-muted">GOSS India</small>
+                                <div class="d-flex align-items-center mt-2">
+                                    <span class="registered-count">👥 6 Registered</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <span class="days-left">⏰ 3 days left</span>
+                                    <div>
+                                        <span class="event-tag">Workshops</span>
+                                        <span class="event-tag">AI</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event Card 4 -->
+                    <div class="event-card" data-event="4">
+                        <div class="d-flex align-items-start">
+                            <div class="me-3">
+                                <i class="fas fa-graduation-cap text-success fa-2x"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">Price Me If You Can by InvestSchool</h6>
+                                <small class="text-muted">InvestSchool</small>
+                                <div class="d-flex align-items-center mt-2">
+                                    <span class="prize-badge me-2">₹ 1,000</span>
+                                    <span class="registered-count">👥 12 days left</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <span class="days-left">⏰ 13 days left</span>
+                                    <div>
+                                        <span class="event-tag">Finance</span>
+                                        <span class="event-tag">Awards</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event Card 5 -->
+                    <div class="event-card" data-event="5">
+                        <div class="d-flex align-items-start">
+                            <div class="me-3">
+                                <i class="fas fa-brain text-warning fa-2x"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">ML Quiz Competition</h6>
+                                <small class="text-muted">Knowledge Institute of Technology KIOTI</small>
+                                <div class="d-flex align-items-center mt-2">
+                                    <span class="prize-badge me-2">₹ 4,500</span>
+                                    <span class="registered-count">👥 31 Registered</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <span class="days-left">⏰ 2 days left</span>
+                                    <div>
+                                        <span class="event-tag">Online Quiz</span>
+                                        <span class="event-tag">Engineering Students</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="col-lg-8 col-md-7">
+                <div class="main-content">
+                    <!-- Event Header -->
+                    <div class="d-flex justify-content-between align-items-start mb-4">
+                        <div>
+                            <h3 class="mb-1">U & ME - HACKATHON</h3>
+                            <p class="text-muted mb-2">Edutainr</p>
+                            <div class="d-flex align-items-center text-muted mb-2">
+                                <i class="fas fa-map-marker-alt me-2"></i>
+                                <span>ICT, Coimbatore, Tamil Nadu, India</span>
+                            </div>
+                            <div class="d-flex align-items-center text-muted">
+                                <i class="fas fa-calendar me-2"></i>
+                                <span>Updated On: Jul 8, 2025</span>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <div class="d-flex align-items-center justify-content-end mb-2">
+                                <i class="fas fa-heart text-danger me-2"></i>
+                                <i class="fas fa-share-alt text-primary"></i>
+                            </div>
+                            <a href="#" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-external-link-alt"></i> Official website
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Price and Register -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center mb-3">
+                                <span class="h4 text-primary mb-0">₹ 349</span>
+                            </div>
+                            <button class="register-btn">
+                                <i class="fas fa-user-plus me-2"></i> Register
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="stat-item">
+                                <i class="fas fa-users"></i>
+                                <span>Registered: 14</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-clock"></i>
+                                <span>Registration Deadline: 25 days left</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-eye"></i>
+                                <span>Impressions: 1,047</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-user-friends"></i>
+                                <span>Team Size: 1-4 Members</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Eligibility Section -->
+                    <div class="mb-4">
+                        <h5 class="mb-3"><i class="fas fa-check-circle text-success me-2"></i>Eligibility</h5>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Everyone can apply
+                        </div>
+                    </div>
+
+                    <!-- Stages and Timeline -->
+                    <div class="mb-4">
+                        <h5 class="mb-3"><i class="fas fa-tasks text-primary me-2"></i>Stages and Timelines</h5>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-circle">G</div>
+                            <div>
+                                <h6 class="mb-1">Online Round (Problem Statement Submission)</h6>
+                                <p class="text-muted mb-1">Individual entry will each select and submit 1 problem statement out of 12 themes and collaborate with another participant on or before 26th of July.</p>
+                                <small class="text-primary">Start: 09 Jul 25, 12:00 AM IST</small><br>
+                                <small class="text-primary">End: 09 Aug 25, 11:59 PM IST</small>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-circle">2</div>
+                            <div>
+                                <h6 class="mb-1">U & ME - HACKATHON</h6>
+                                <p class="text-muted mb-1">U & ME Hackathon is a 12-hour Hackathon hosted by Edu Tamil in Collaboration with Coimbatore Institute of Technology, happening on 9th August 2025, from 9:00 AM to 9:00 PM.</p>
+                                <small class="text-primary">Start: 09 Aug 25, 09:00 AM IST</small><br>
+                                <small class="text-primary">End: 09 Aug 25, 09:00 PM IST</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event Details -->
+                    <div class="mb-4">
+                        <h5 class="mb-3"><i class="fas fa-info-circle text-info me-2"></i>All that you need to know about U & ME - HACKATHON</h5>
+                        <p>U & ME Hackathon is organized by Edutainr to find the best talent in the town. The event brings together students and professionals to collaborate on innovative solutions.</p>
+                        
+                        <p><strong>hackathon challenge</strong> will be held at Coimbatore Institute of Technology on 9th August 2025.</p>
+                        
+                        <h6 class="mt-4">Guidelines:</h6>
+                        <ul>
+                            <li>Duration: 12 hours (9:00 AM - 9:00 PM) on 9th August 2025</li>
+                            <li>Team size: Individual or 2-4 students, with mentor (guide-staff)</li>
+                            <li>12 Themes with 12 problem statements each</li>
+                            <li>Participants can select any one problem statement from the available list</li>
+                            <li>The registration fee for Individual is ₹ 349/- & for a Team (2-4 students) is ₹ 699/-</li>
+                        </ul>
+
+                        <h6 class="mt-4">Rules:</h6>
+                        <ul>
+                            <li>All participants must report to the venue by 7:30 AM sharp</li>
+                            <li>Registration & Problem statement selection and submission must be completed by 9th August 2025 (via form provided)</li>
+                            <li>Mentor presence on the hackathon day is not mandatory</li>
+                        </ul>
+
+                        <h6 class="mt-4">Important dates & deadlines:</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-calendar-check text-success me-2"></i>
+                                    <div>
+                                        <strong>Registration Deadline</strong><br>
+                                        <small>25 Aug 25, 11:59 PM IST</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-calendar-alt text-primary me-2"></i>
+                                    <div>
+                                        <strong>EVENT DATE</strong><br>
+                                        <small>09 Aug 25, 09:00 AM IST</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Organisers -->
+                    <div class="mb-4">
+                        <h5 class="mb-3"><i class="fas fa-address-book text-secondary me-2"></i>Contact the organisers</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="contact-card">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                            <span class="text-white fw-bold">TH</span>
+                                        </div>
+                                        <div>
+                                            <strong>Thayanithi K</strong><br>
+                                            <small class="text-muted">thayanithi@edutainr.in</small><br>
+                                            <small class="text-muted">+918333630365</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="contact-card">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-success rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                            <span class="text-white fw-bold">RU</span>
+                                        </div>
+                                        <div>
+                                            <strong>Ruthragesan K</strong><br>
+                                            <small class="text-muted">ruthragesan@edutainr.in</small><br>
+                                            <small class="text-muted">+918374236342</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rewards & Prizes -->
+                    <div class="mb-4">
+                        <h5 class="mb-3"><i class="fas fa-trophy text-warning me-2"></i>What's at stake - Rewards and Prizes?</h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="prize-card">
+                                    <div class="mb-3">
+                                        <i class="fas fa-trophy fa-3x text-warning"></i>
+                                    </div>
+                                    <h6>Winner</h6>
+                                    <p class="text-muted mb-2">12 weeks Internship with free Microsoft - Industrial Visit</p>
+                                    <div class="prize-amount">₹ 12,000</div>
+                                    <i class="fas fa-certificate text-primary mt-2"></i>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="prize-card">
+                                    <div class="mb-3">
+                                        <i class="fas fa-medal fa-3x text-info"></i>
+                                    </div>
+                                    <h6>Runner</h6>
+                                    <p class="text-muted mb-2">12 weeks Internship</p>
+                                    <div class="prize-amount">₹ 6,000</div>
+                                    <i class="fas fa-certificate text-primary mt-2"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <div class="prize-card d-inline-block">
+                                <div class="mb-3">
+                                    <i class="fas fa-gift fa-3x text-success"></i>
+                                </div>
+                                <h6>Participation Certificate</h6>
+                                <i class="fas fa-certificate text-primary mt-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Event card selection
+        document.querySelectorAll('.event-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.event-card').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Register button
+        document.querySelector('.register-btn').addEventListener('click', function() {
+            alert('Registration functionality would be implemented here!');
+        });
+
+        // Add smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
