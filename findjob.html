@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Platform - Jobs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid #e1e8ed;
+            padding: 0 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            height: 60px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            margin-right: 16px;
+            color: #666;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 12px 8px 36px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 14px;
+            background: #f8f9fa;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+
+        .filters-section {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            height: fit-content;
+            position: sticky;
+            top: 80px;
+        }
+
+        .filter-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 8px 16px;
+            background: #e3f2fd;
+            border-radius: 20px;
+        }
+
+        .filter-badge {
+            background: #1976d2;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .filter-group {
+            margin-bottom: 16px;
+        }
+
+        .filter-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .filter-option {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            border-radius: 16px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-option:hover {
+            background: #f0f0f0;
+        }
+
+        .filter-option.active {
+            background: #1976d2;
+            color: white;
+            border-color: #1976d2;
+        }
+
+        .jobs-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .job-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .job-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .job-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .company-name {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .job-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .action-btn:hover {
+            color: #1976d2;
+        }
+
+        .job-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .job-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .job-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .job-tag {
+            background: #f0f0f0;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .apply-btn {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .apply-btn:hover {
+            background: #1565c0;
+        }
+
+        .job-detail-panel {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 50%;
+            height: 100vh;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            z-index: 200;
+            overflow-y: auto;
+        }
+
+        .job-detail-panel.open {
+            right: 0;
+        }
+
+        .job-detail-header {
+            padding: 20px;
+            border-bottom: 1px solid #e1e8ed;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .job-detail-content {
+            padding: 20px;
+        }
+
+        .job-detail-section {
+            margin-bottom: 24px;
+        }
+
+        .job-detail-section h3 {
+            margin-bottom: 12px;
+            color: #333;
+        }
+
+        .job-detail-section p {
+            line-height: 1.6;
+            color: #666;
+        }
+
+        .job-detail-section ul {
+            padding-left: 20px;
+        }
+
+        .job-detail-section li {
+            margin-bottom: 8px;
+            color: #666;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.3);
+            z-index: 150;
+            display: none;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        .floating-chat {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: #1976d2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .floating-chat:hover {
+            background: #1565c0;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 12px;
+            }
+
+            .filters-section {
+                position: relative;
+                top: 0;
+                order: 2;
+            }
+
+            .job-detail-panel {
+                width: 100%;
+            }
+
+            .job-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .job-actions {
+                align-self: flex-end;
+            }
+
+            .header-content {
+                padding: 0 12px;
+            }
+
+            .search-container {
+                max-width: none;
+                margin: 0 12px;
+            }
+
+            .floating-chat {
+                width: 50px;
+                height: 50px;
+                bottom: 16px;
+                right: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .job-card {
+                padding: 16px;
+            }
+
+            .job-title {
+                font-size: 16px;
+            }
+
+            .job-meta {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .filters-section {
+                padding: 12px;
+            }
+
+            .filter-header {
+                padding: 6px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <button class="back-btn">←</button>
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" placeholder="Search jobs...">
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside class="filters-section">
+            <div class="filter-header">
+                <span>🔍</span>
+                <span>Filters</span>
+                <span class="filter-badge">4</span>
+            </div>
+
+            <div class="filter-group">
+                <div class="filter-title">Location</div>
+                <div class="filter-options">
+                    <div class="filter-option active">Remote</div>
+                    <div class="filter-option">Mumbai</div>
+                    <div class="filter-option">Delhi</div>
+                    <div class="filter-option">Bangalore</div>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <div class="filter-title">Work Type</div>
+                <div class="filter-options">
+                    <div class="filter-option active">Full Time</div>
+                    <div class="filter-option">Part Time</div>
+                    <div class="filter-option">Contract</div>
+                    <div class="filter-option">Internship</div>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <div class="filter-title">Experience</div>
+                <div class="filter-options">
+                    <div class="filter-option">0-1 years</div>
+                    <div class="filter-option active">1-3 years</div>
+                    <div class="filter-option">3-5 years</div>
+                    <div class="filter-option">5+ years</div>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <div class="filter-title">Category</div>
+                <div class="filter-options">
+                    <div class="filter-option active">Design</div>
+                    <div class="filter-option">Engineering</div>
+                    <div class="filter-option">Marketing</div>
+                    <div class="filter-option">Sales</div>
+                    <div class="filter-option">Finance</div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="jobs-section">
+            <div class="job-card" onclick="openJobDetail(0)">
+                <div class="job-header">
+                    <div>
+                        <h2 class="job-title">Graphic Designer</h2>
+                        <p class="company-name">Credence Wealth Management Pvt. Ltd.</p>
+                    </div>
+                    <div class="job-actions">
+                        <button class="action-btn">💾</button>
+                        <button class="action-btn">📋</button>
+                    </div>
+                </div>
+                <div class="job-meta">
+                    <div class="job-meta-item">
+                        <span>📍</span>
+                        <span>Surat</span>
+                    </div>
+                    <div class="job-meta-item">
+                        <span>📅</span>
+                        <span>13 days left</span>
+                    </div>
+                    <div class="job-meta-item">
+                        <span>👥</span>
+                        <span>1 Applied</span>
+                    </div>
+                </div>
+                <div class="job-tags">
+                    <span class="job-tag">Experienced Professionals</span>
+                </div>
+                <button class="apply-btn">Quick Apply</button>
+            </div>
+
+            <div class="job-card" onclick="openJobDetail(1)">
+                <div class="job-header">
+                    <div>
+                        <h2 class="job-title">Field Operations & Site Coordinator</h2>
+                        <p class="company-name">Ghaziabad</p>
+                    </div>
+                    <div class="job-actions">
+                        <button class="action-btn">💾</button>
+                        <button class="action-btn">📋</button>
+                    </div>
+                </div>
+                <div class="job-meta">
+                    <div class="job-meta-item">
+                        <span>👥</span>
+                        <span>468 Applied</span>
+                    </div>
+                    <div class="job-meta-item">
+                        <span>📅</span>
+                        <span>4 days left</span>
+                    </div>
+                </div>
+                <div class="job-tags">
+                    <span class="job-tag">Engineering Students</span>
+                    <span class="job-tag">MBA Students</span>
+                </div>
+                <button class="apply-btn">Quick Apply</button>
+            </div>
+
+            <div class="job-card" onclick="openJobDetail(2)">
+                <div class="job-header">
+                    <div>
+                        <h2 class="job-title">Accountant</h2>
+                        <p class="company-name">Spandana At Private Limited</p>
+                    </div>
+                    <div class="job-actions">
+                        <button class="action-btn">💾</button>
+                        <button class="action-btn">📋</button>
+                    </div>
+                </div>
+                <div class="job-meta">
+                    <div class="job-meta-item">
+                        <span>👥</span>
+                        <span>5,517 Applied</span>
+                    </div>
+                    <div class="job-meta-item">
+                        <span>📅</span>
+                        <span>5 months left</span>
+                    </div>
+                </div>
+                <div class="job-tags">
+                    <span class="job-tag">All</span>
+                </div>
+                <button class="apply-btn">Quick Apply</button>
+            </div>
+
+            <div class="job-card" onclick="openJobDetail(3)">
+                <div class="job-header">
+                    <div>
+                        <h2 class="job-title">Customer Service Representative</h2>
+                        <p class="company-name">Indostar</p>
+                    </div>
+                    <div class="job-actions">
+                        <button class="action-btn">💾</button>
+                        <button class="action-btn">📋</button>
+                    </div>
+                </div>
+                <div class="job-meta">
+                    <div class="job-meta-item">
+                        <span>👥</span>
+                        <span>2,936 Applied</span>
+                    </div>
+                    <div class="job-meta-item">
+                        <span>📅</span>
+                        <span>5 months left</span>
+                    </div>
+                </div>
+                <div class="job-tags">
+                    <span class="job-tag">All</span>
+                </div>
+                <button class="apply-btn">Quick Apply</button>
+            </div>
+        </main>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="closeJobDetail()"></div>
+
+    <div class="job-detail-panel" id="jobDetailPanel">
+        <div class="job-detail-header">
+            <h2 id="detailJobTitle">Job Details</h2>
+            <button class="close-btn" onclick="closeJobDetail()">×</button>
+        </div>
+        <div class="job-detail-content" id="jobDetailContent">
+            <!-- Job details will be populated here -->
+        </div>
+    </div>
+
+    <div class="floating-chat">
+        <span style="color: white; font-size: 24px;">💬</span>
+    </div>
+
+    <script>
+        const jobDetails = [
+            {
+                title: "Graphic Designer",
+                company: "Credence Wealth Management Pvt. Ltd.",
+                location: "Surat",
+                salary: "₹2.4 LPA - 3 LPA",
+                description: "At Credence Wealth Management Pvt. Ltd., we believe that impactful visuals paired with compelling content drive our brand's growth and client engagement. Join us as we craft clear, creative, and confident communications in the finance sector.",
+                roleOverview: "We're seeking a creative and motivated Graphic Designer & Content Creator for at least 1 - 1.5 years of experience. You will design compelling visuals and create engaging content that strengthens our brand presence across digital platforms.",
+                responsibilities: [
+                    "Design eye-catching graphics for social media, email campaigns, and marketing materials.",
+                    "Create original and relevant content aligned with our brand voice and financial industry standards.",
+                    "Collaborate with marketing and HR teams to develop promotional materials and social media campaigns.",
+                    "Manage content calendars and ensure timely delivery of creative assets.",
+                    "Use design tools like Canva and Figma proficiently to produce professional-quality work."
+                ],
+                requirements: [
+                    "Minimum 1 - 1.5 years experience as a Graphic Designer and Content Creator, preferably in finance or corporate sectors.",
+                    "Strong proficiency in Canva and Figma is a must.",
+                    "Ability to create visually appealing, and engaging content tailored to the target audience.",
+                    "Understanding of digital marketing principles and social media platforms.",
+                    "Attention to detail with strong aesthetic sense and brand alignment."
+                ]
+            },
+            {
+                title: "Field Operations & Site Coordinator",
+                company: "Ghaziabad",
+                location: "Ghaziabad",
+                salary: "₹15,000 - ₹25,000/month",
+                description: "Coordinate field operations and manage site activities. Excellent opportunity for engineering and MBA students to gain practical experience.",
+                roleOverview: "Looking for a dynamic individual to coordinate field operations and manage site activities effectively.",
+                responsibilities: [
+                    "Coordinate field operations and site activities",
+                    "Manage project timelines and deliverables",
+                    "Ensure quality standards are maintained",
+                    "Communicate with stakeholders and team members"
+                ],
+                requirements: [
+                    "Engineering or MBA background preferred",
+                    "Strong organizational skills",
+                    "Excellent communication abilities",
+                    "Ability to work in field conditions"
+                ]
+            },
+            {
+                title: "Accountant",
+                company: "Spandana At Private Limited",
