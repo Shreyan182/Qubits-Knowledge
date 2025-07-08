@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Platform</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-purple: #6366f1;
+            --secondary-purple: #8b5cf6;
+            --accent-orange: #f97316;
+            --accent-yellow: #eab308;
+            --dark-bg: #1e293b;
+            --light-bg: #f8fafc;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--light-bg);
+        }
+
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
+            color: white;
+            padding: 60px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-illustration {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect width="400" height="300" fill="%23f0f9ff"/><circle cx="200" cy="150" r="80" fill="%23dbeafe"/><rect x="160" y="120" width="80" height="60" rx="10" fill="%23ffffff"/><circle cx="180" cy="140" r="8" fill="%23f59e0b"/><circle cx="220" cy="140" r="8" fill="%236366f1"/><rect x="160" y="155" width="80" height="4" rx="2" fill="%23e5e7eb"/><rect x="160" y="165" width="60" height="4" rx="2" fill="%23e5e7eb"/><polygon points="300,50 320,70 300,90 280,70" fill="%236366f1"/><circle cx="320" cy="200" r="15" fill="%23f59e0b"/><rect x="50" y="200" width="30" height="30" rx="5" fill="%23ef4444"/><polygon points="350,250 370,270 350,290 330,270" fill="%2310b981"/></svg>') center/cover;
+            height: 200px;
+            border-radius: 10px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-bg);
+            margin-bottom: 2rem;
+        }
+
+        .card-custom {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .card-custom:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .card-purple {
+            background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
+            color: white;
+        }
+
+        .card-orange {
+            background: linear-gradient(135deg, var(--accent-orange) 0%, #fb923c 100%);
+            color: white;
+        }
+
+        .card-yellow {
+            background: linear-gradient(135deg, var(--accent-yellow) 0%, #fbbf24 100%);
+            color: white;
+        }
+
+        .card-dark {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #334155 100%);
+            color: white;
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .badge-custom {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-purple);
+        }
+
+        .nav-pills .nav-link {
+            border-radius: 20px;
+            margin: 0 0.25rem;
+            padding: 0.5rem 1rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .nav-pills .nav-link.active {
+            background: var(--primary-purple);
+            color: white;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .project-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .btn-custom {
+            background: var(--primary-purple);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            background: var(--secondary-purple);
+            transform: translateY(-1px);
+        }
+
+        .section-bg {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .skill-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .progress-custom {
+            height: 8px;
+            border-radius: 4px;
+            background: #e5e7eb;
+        }
+
+        .progress-bar-custom {
+            background: linear-gradient(90deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
+            border-radius: 4px;
+        }
+
+        .challenge-card {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .challenge-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            transform: translate(30px, -30px);
+        }
+
+        .floating-elements {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            color: rgba(255,255,255,0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="fas fa-code text-primary me-2"></i>Knowledge Platform
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-bell text-warning"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-envelope text-primary"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-user-circle text-success"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 hero-content">
+                    <h1 class="display-4 fw-bold mb-4">Unlock Perfection</h1>
+                    <p class="lead mb-4">Master coding concepts with AI-powered practice tests, mock interviews, and personalized learning paths designed to boost your dream company.</p>
+                    <button class="btn btn-light btn-lg px-4 py-2">
+                        <i class="fas fa-play me-2"></i>Get Started
+                    </button>
+                    <div class="row mt-5">
+                        <div class="col-md-3 col-6 text-center mb-3">
+                            <div class="stat-card">
+                                <i class="fas fa-users text-primary mb-2" style="font-size: 1.5rem;"></i>
+                                <div class="stat-number">1M+</div>
+                                <small>Students</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 text-center mb-3">
+                            <div class="stat-card">
+                                <i class="fas fa-code text-success mb-2" style="font-size: 1.5rem;"></i>
+                                <div class="stat-number">50K+</div>
+                                <small>Problems</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 text-center mb-3">
+                            <div class="stat-card">
+                                <i class="fas fa-building text-warning mb-2" style="font-size: 1.5rem;"></i>
+                                <div class="stat-number">500+</div>
+                                <small>Companies</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 text-center mb-3">
+                            <div class="stat-card">
+                                <i class="fas fa-trophy text-danger mb-2" style="font-size: 1.5rem;"></i>
+                                <div class="stat-number">95%</div>
+                                <small>Success Rate</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="hero-illustration"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container my-5">
+        <!-- AI-Powered Mock Tests -->
+        <div class="section-bg">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section-title">AI-Powered Mock Tests</h2>
+                <a href="#" class="text-decoration-none">View All <i class="fas fa-arrow-right ms-1"></i></a>
+            </div>
+            <p class="text-muted mb-4">Master your concepts with AI-powered intelligently mock tests for 100+ dream companies</p>
+            
+            <ul class="nav nav-pills mb-4">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Tech</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Management</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">General</a>
+                </li>
+            </ul>
+
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card card-custom card-purple">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="card-icon">
+                                    <i class="fas fa-laptop-code"></i>
+                                </div>
+                                <span class="badge badge-custom">New</span>
+                            </div>
+                            <h5 class="card-title">Software Developer</h5>
+                            <p class="card-text">Test your programming skills with real-world scenarios</p>
+                            <div class="floating-elements">
+                                <i class="fas fa-code"></i>
+                                <i class="fas fa-laptop ms-2"></i>
+                                <i class="fas fa-terminal ms-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card card-custom card-orange">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="card-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <span class="badge badge-custom">Popular</span>
+                            </div>
+                            <h5 class="card-title">Data Analyst</h5>
+                            <p class="card-text">Analyze data patterns and statistical concepts</p>
+                            <div class="floating-elements">
+                                <i class="fas fa-chart-bar"></i>
+                                <i class="fas fa-chart-pie ms-2"></i>
+                                <i class="fas fa-analytics ms-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card card-custom card-yellow">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="card-icon">
+                                    <i class="fas fa-server"></i>
+                                </div>
+                                <span class="badge badge-custom">Trending</span>
+                            </div>
+                            <h5 class="card-title">Backend Developer</h5>
+                            <p class="card-text">Server-side development and database design</p>
+                            <div class="floating-elements">
+                                <i class="fas fa-database"></i>
+                                <i class="fas fa-server ms-2"></i>
+                                <i class="fas fa-cloud ms-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI-Powered Mock Interview -->
+        <div class="section-bg">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section-title">AI-Powered Mock Interview</h2>
+                <a href="#" class="text-decoration-none">View All <i class="fas fa-arrow-right ms-1"></i></a>
+            </div>
+            <p class="text-muted mb-4">Practice interviews with AI-powered feedback and real-time analysis</p>
+            
+            <ul class="nav nav-pills mb-4">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Tech</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Management</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">General</a>
+                </li>
+            </ul>
+
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card card-custom card-purple">
+                        <div class="card-body">
+                            <div class="card-icon">
+                                <i class="fas fa-microphone"></i>
+                            </div>
+                            <h5 class="card-title">
+                                <i class="fas fa-microphone-alt me-2"></i>Software Developer
+                            </h5>
+                            <p class="card-text">Technical interview preparation with coding challenges</p>
+                            <small class="text-light">
+                                <i class="fas fa-play me-1"></i>Start Interview
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card card-custom card-orange">
+                        <div class="card-body">
+                            <div class="card-icon">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <h5 class="card-title">
+                                <i class="fas fa-chart-line me-2"></i>Data Analyst
+                            </h5>
+                            <p class="card-text">Statistical analysis and data interpretation questions</p>
+                            <small class="text-light">
+                                <i class="fas fa-play me-1"></i>Start Interview
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card card-custom card-yellow">
+                        <div class="card-body">
+                            <div class="card-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h5 class="card-title">
+                                <i class="fas fa-user-tie me-2"></i>Product Manager
+                            </h5>
+                            <p class="card-text">Product strategy and management scenarios</p>
+                            <small class="text-light">
+                                <i class="fas fa-play me-1"></i>Start Interview
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI-Powered Skill Based Mock Tests -->
+        <div class="section-bg">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section-title">AI-Powered Skill Based Mock Tests</h2>
+                <a href="#" class="text-decoration-none">View All <i class="fas fa-arrow-right ms-1"></i></a>
+            </div>
+            <p class="text-muted mb-4">Master your concepts with AI-powered intelligently mock tests for 100+ dream companies</p>
+            
+            <ul class="nav nav-pills mb-4">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Tech</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Management</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">General</a>
+                </li>
+            </ul>
+
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card card-custom card-yellow">
+                        <div class="card-body">
+                            <div class="card-icon">
+                                <i class="fas fa-code-branch"></i>
+                            </div>
+                            <h5 class="card-title">
+                                <i class="fas fa-desktop me-2"></i>Computer Fundamentals
+                            </h5>
+                            <p class="card-text">Basic computer science concepts and theory</p>
+                            <small class="text-light">
+                                <i class="fas fa-play me-1"></i>Start Test
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card card-custom card-yellow">
+                        <div class="card-body">
+                            <div class="card-icon">
+                                <i class="fas fa-network-wired"></i>
+                            </div>
+                            <h5 class="card-title">
+                                <i class="fas fa-wifi me-2"></i>Computer Networks
+                            </h5>
+                            <p class="card-text">Network protocols and system architecture</p>
+                            <small class="text-light">
+                                <i class="fas fa-play me-1"></i>Start Test
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card card-custom card-yellow">
+                        <div class="card-body">
+                            <div class="card-icon">
+                                <i class="fas fa-sitemap"></i>
+                            </div>
+                            <h5 class="card-title">
+                                <i class="fas fa-project-diagram me-2"></i>Data Structures & Algorithms
+                            </h5>
+                            <p class="card-text">Advanced problem-solving techniques</p>
+                            <small class="text-light">
+                                <i class="fas fa-play me-1"></i>Start Test
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Sections -->
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card card-custom card-dark">
+                    <div class="card-body">
+                        <i class="fas fa-calendar-alt text-white mb-3" style="font-size: 2rem;"></i>
+                        <h3 class="card-title">100 Days Coding Sprint</h3>
+                        <p class="card-text">Challenge yourself with daily coding problems</p>
+                        <button class="btn btn-light">
+                            <i class="fas fa-rocket me-2"></i>Start Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card card-custom card-orange">
+                    <div class="card-body">
+                        <i class="fas fa-code-branch text-white mb-3" style="font-size: 2rem;"></i>
+                        <h3 class="card-title">Code Conquest</h3>
+                        <p class="card-text">Competitive programming challenges</p>
+                        <button class="btn btn-light">
+                            <i class="fas fa-trophy me-2"></i>Start Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mock Interview Promotion -->
+        <div class="section-bg">
+            <div class="card card-custom card-purple">
+                <div class="card-body text-center">
+                    <i class="fas fa-robot text-white mb-3" style="font-size: 3rem;"></i>
+                    <h3 class="card-title">AI Powered Mock Interview</h3>
+                    <p class="card-text">Over 100 Interview Questions and Answers</p>
+                    <button class="btn btn-light btn-lg">
+                        <i class="fas fa-play me-2"></i>Start Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Challenges -->
+        <div class="section-bg">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section-title">Challenges</h2>
+                <a href="#" class="text-decoration-none">View All <i class="fas fa-arrow-right ms-1"></i></a>
+            </div>
+            <p class="text-muted mb-4">Weekly coding challenges to boost your performance</p>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="challenge-card">
+                        <i class="fas fa-calendar-week text-white mb-3" style="font-size: 2rem;"></i>
+                        <h5 class="card-title">Weekly Coding Challenge</h5>
+                        <p class="card-text">New challenges every week</p>
+                        <small><i class="fas fa-eye me-1"></i>View Requirements</small>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="challenge-card">
+                        <i class="fas fa-file-alt text-white mb-3" style="font-size: 2rem;"></i>
+                        <h5 class="card-title">Project/Resume Challenge</h5>
+                        <p class="card-text">Build impressive projects</p>
+                        <small><i class="fas fa-eye me-1"></i>View Requirements</small>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="challenge-card">
+                        <i class="fas fa-briefcase text-white mb-3" style="font-size: 2rem;"></i>
+                        <h5 class="card-title">Weekly Case Challenge</h5>
+                        <p class="card-text">Real-world case studies</p>
+                        <small><i class="fas fa-eye me-1"></i>View Requirements</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects -->
+        <div class="section-bg">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section-title">Projects</h2>
+                <a href="#" class="text-decoration-none">View All <i class="fas fa-arrow-right ms-1"></i></a>
+            </div>
+            <p class="text-muted mb-4">Get ready for real-world scenarios with detailed walkthroughs from data. Each project will guide you through the entire development process.</p>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="project-card">
+                        <div class="project-logo" style="background: #3b82f6;">
+                            DB
+                        </div>
+                        <h6 class="fw-bold">
+                            <i class="fas fa-database me-2"></i>Amazon Express Data Migration
+                        </h6>
+                        <p class="text-muted small">Data migration project with real-world scenarios</p>
+                        <span class="badge bg-primary">
+                            <i class="fas fa-chart-line me-1"></i>Data Science
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="project-card">
+                        <div class="project-logo" style="background: #f59e0b;">
+                            NF
+                        </div>
+                        <h6 class="fw-bold">
+                            <i class="fas fa-tv me-2"></i>Netflix Movie Suggestion System
+                        </h6>
+                        <p class="text-muted small">Machine learning recommendation engine</p>
+                        <span class="badge bg-warning">
+                            <i class="fas fa-brain me-1"></i>ML/AI
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="project-card">
+                        <div class="project-logo" style="background: #ef4444;">
+                            AZ
+                        </div>
+                        <h6 class="fw-bold">
+                            <i class="fas fa-shopping-cart me-2"></i>Amazon Item Segment System
+                        </h6>
+                        <p class="text-muted small">E-commerce categorization system</p>
+                        <span class="badge bg-danger">
+                            <i class="fas fa-server me-1"></i>Backend
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Company Preparation -->
+        <div class="section-bg">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section-title">Company Preparation</h2>
+                <a href="#" class="text-decoration-none">View All <i class="fas fa-arrow-right ms-1"></i></a>
+            </div>
+            
+            <ul class="nav nav-pills mb-4">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Tech</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">MBA</a>
+                </li>
+            </ul>
+
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <div class="card card-custom card-yellow">
+                        <div class="card-body">
+                            <div class="card-icon">
+                                <i class="fab fa-facebook"></i>
+                            </div>
+                            <h6 class="card-title">
+                                <i class="fab fa-facebook-f me-2"></i>Facebook
+                            </h6>
+                            <p class="card-text small">Placement Interview Preparation</p>
+                            <small class="text-light">
+                                <i class="fas fa-play me-1"></i>Start Preparation
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card card-custom card-yellow">
+                        <div class="card-body">
+                            <div class="card-icon">
+                                <i class="fab fa-google"></i>
+                            </div>
+                            <h6 class="card-title">
+                                <i class="fab fa-google me-2"></i>Google
+                            </h6>
+                            <p class="card-text small">Technical Interview Preparation</p>
+                            <small class="text-light">
+                                <i class="fas fa-play me-1"></i>Start Preparation
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card card-custom card-yellow">
+                        <div class="card-body">
+                            <div class="card-icon">
+                                <i class="fab fa-microsoft"></i>
+                            </div>
+                            <h6 class="card-title">
+                                <i class="fab fa-microsoft me-2"></i>Microsoft
+                            </h6>
+                            <p class="card-text small">Software Interview Preparation</p>
+                            <small class="text-light">
+                                <i class="fas fa-play me-1"></i>Start Preparation
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card card-custom card-yellow">
+                        <div class="card-body">
+                            <div class="card-icon">
+                                <i class="fab fa-apple"></i>
+                            </div>
+                            <h6 class="card-title">
+                                <i class="fab fa-apple me-2"></i>Apple
+                            </h6>
+                            <p class="card-text small">iOS Interview Preparation</p>
+                            <small class="text-light">
+                                <i class="fas fa-play me-1"></i>Start Preparation
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skill Based Mock Test (Bottom) -->
+        <div class="section-bg">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section-title">Skill Based Mock Test (Assessments)</h2>
+                <a href="#" class="text-decoration-none">View All <i class="fas fa-arrow-right ms-1"></i></a>
+            </div>
+            <p class="text-muted mb-4">Master your concepts with AI-powered intelligently mock tests for 100+ dream companies</p>
+            
+            <ul class="nav nav-pills mb-4">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Tech</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Management</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">General</a>
+                </li>
+            </ul>
+
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card card-custom card-yellow">
+                        <div class="card-body">
+                            <div class="card-icon">
+                                <i class="fas fa-laptop">
