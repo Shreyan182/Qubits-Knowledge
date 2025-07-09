@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e9ecef;
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 20px;
+        }
+
+        .back-arrow {
+            color: #6c757d;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: #007bff;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-item {
+            color: #6c757d;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            color: #007bff;
+        }
+
+        .profile-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 20px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            border-radius: 8px;
+            padding: 0;
+            height: fit-content;
+            border: 1px solid #e9ecef;
+        }
+
+        .sidebar-header {
+            padding: 16px;
+            border-bottom: 1px solid #e9ecef;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid #f8f9fa;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .sidebar-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .sidebar-item:last-child {
+            border-bottom: none;
+        }
+
+        .sidebar-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .sidebar-icon.ui-ux { background: #28a745; }
+        .sidebar-icon.hackathon { background: #dc3545; }
+        .sidebar-icon.codeclash { background: #ffc107; color: #333; }
+        .sidebar-icon.design { background: #17a2b8; }
+        .sidebar-icon.adobe { background: #ff6b35; }
+        .sidebar-icon.demos { background: #6f42c1; }
+        .sidebar-icon.hack-veda { background: #fd7e14; }
+        .sidebar-icon.hackverse { background: #20c997; }
+
+        .sidebar-content {
+            flex: 1;
+        }
+
+        .sidebar-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 2px;
+        }
+
+        .sidebar-subtitle {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .prize {
+            color: #ffc107;
+            font-weight: 600;
+        }
+
+        .participants {
+            color: #6c757d;
+        }
+
+        .time-left {
+            color: #28a745;
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e9ecef;
+        }
+
+        .event-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+            position: relative;
+        }
+
+        .event-content {
+            padding: 24px;
+        }
+
+        .event-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .event-organizer {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 16px;
+        }
+
+        .event-meta {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .meta-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .prize-amount {
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 16px;
+        }
+
+        .register-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+
+        .register-button:hover {
+            background: #0056b3;
+        }
+
+        .event-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 4px;
+        }
+
+        .event-details {
+            border-top: 1px solid #e9ecef;
+            padding-top: 24px;
+        }
+
+        .detail-section {
+            margin-bottom: 24px;
+        }
+
+        .detail-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .detail-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .detail-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .detail-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f8f9fa;
+        }
+
+        .detail-list li:last-child {
+            border-bottom: none;
+        }
+
+        .detail-list strong {
+            color: #333;
+        }
+
+        .eligibility-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .tag {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 0 15px;
+                gap: 15px;
+            }
+
+            .search-container {
+                max-width: 200px;
+            }
+
+            .header-nav {
+                gap: 10px;
+            }
+
+            .nav-item {
+                font-size: 12px;
+            }
+
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 15px;
+                gap: 15px;
+            }
+
+            .sidebar {
+                order: 2;
+            }
+
+            .main-content {
+                order: 1;
+            }
+
+            .event-content {
+                padding: 20px;
+            }
+
+            .event-title {
+                font-size: 20px;
+            }
+
+            .event-meta {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .event-stats {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .sidebar-item {
+                padding: 10px 12px;
+            }
+
+            .sidebar-icon {
+                width: 36px;
+                height: 36px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-container {
+                padding: 0 10px;
+                gap: 10px;
+            }
+
+            .search-container {
+                max-width: 150px;
+            }
+
+            .logo {
+                font-size: 16px;
+            }
+
+            .main-container {
+                padding: 10px;
+            }
+
+            .event-content {
+                padding: 15px;
+            }
+
+            .event-title {
+                font-size: 18px;
+            }
+
+            .prize-amount {
+                font-size: 24px;
+            }
+
+            .sidebar-icon {
+                width: 32px;
+                height: 32px;
+            }
+
+            .sidebar-title {
+                font-size: 13px;
+            }
+
+            .sidebar-subtitle {
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <span class="back-arrow">←</span>
+            <a href="#" class="logo">Knowledge Platform</a>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search here quick...">
+            </div>
+            <nav class="header-nav">
+                <a href="#" class="nav-item">Host</a>
+                <a href="#" class="nav-item">Hire</a>
+                <a href="#" class="nav-item">Learn</a>
+                <a href="#" class="nav-item">Practice</a>
+                <a href="#" class="nav-item">Compete</a>
+                <a href="#" class="nav-item">Mentorship</a>
+                <div class="profile-icon">👤</div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                Gamified Learning Application Presentation
+            </div>
+            
+            <div class="sidebar-item">
+                <div class="sidebar-icon ui-ux">UX</div>
+                <div class="sidebar-content">
+                    <div class="sidebar-title">UI & UX - HACKATHON</div>
+                    <div class="sidebar-subtitle">Figma</div>
+                    <div class="sidebar-meta">
+                        <span class="prize">₹ 4,000</span>
+                        <span class="participants">22 Registered</span>
+                    </div>
+                    <div class="time-left">30 days left</div>
+                </div>
+            </div>
+
+            <div class="sidebar-item">
+                <div class="sidebar-icon hackathon">HC</div>
+                <div class="sidebar-content">
+                    <div class="sidebar-title">HackChrono</div>
+                    <div class="sidebar-subtitle">Chandigarh University</div>
+                    <div class="sidebar-meta">
+                        <span class="prize">₹ 1,00,000</span>
+                        <span class="participants">64 Registered</span>
+                    </div>
+                    <div class="time-left">1 month left</div>
+                </div>
+            </div>
+
+            <div class="sidebar-item">
+                <div class="sidebar-icon codeclash">CC</div>
+                <div class="sidebar-content">
+                    <div class="sidebar-title">CodeClash: The August Arena</div>
+                    <div class="sidebar-subtitle">LeetCode Community</div>
+                    <div class="sidebar-meta">
+                        <span class="prize">₹ 5,000</span>
+                        <span class="participants">447 Registered</span>
+                    </div>
+                    <div class="time-left">1 month left</div>
+                </div>
+            </div>
+
+            <div class="sidebar-item">
+                <div class="sidebar-icon design">24</div>
+                <div class="sidebar-content">
+                    <div class="sidebar-title">24-Hour UI/UX Design Hackathon</div>
+                    <div class="sidebar-subtitle">Figma</div>
+                    <div class="sidebar-meta">
+                        <span class="prize">₹ 775</span>
+                        <span class="participants">Registered</span>
+                    </div>
+                    <div class="time-left">8 days left</div>
+                </div>
+            </div>
+
+            <div class="sidebar-item">
+                <div class="sidebar-icon adobe">AI</div>
+                <div class="sidebar-content">
+                    <div class="sidebar-title">Adobe India Hackathon</div>
+                    <div class="sidebar-subtitle">Adobe</div>
+                    <div class="sidebar-meta">
+                        <span class="prize">₹ 5,00,000</span>
+                        <span class="participants">175 Registered</span>
+                    </div>
+                    <div class="time-left">22 days left</div>
+                </div>
+            </div>
+
+            <div class="sidebar-item">
+                <div class="sidebar-icon demos">D2</div>
+                <div class="sidebar-content">
+                    <div class="sidebar-title">Demos 2.0</div>
+                    <div class="sidebar-subtitle">Student</div>
+                    <div class="sidebar-meta">
+                        <span class="prize">₹ 37</span>
+                        <span class="participants">Registered</span>
+                    </div>
+                    <div class="time-left">1 month left</div>
+                </div>
+            </div>
+
+            <div class="sidebar-item">
+                <div class="sidebar-icon hack-veda">HV</div>
+                <div class="sidebar-content">
+                    <div class="sidebar-title">Hack Veda</div>
+                    <div class="sidebar-subtitle">University Institute of Engineering</div>
+                    <div class="sidebar-meta">
+                        <span class="prize">₹ 308</span>
+                        <span class="participants">Registered</span>
+                    </div>
+                    <div class="time-left">1 month left</div>
+                </div>
+            </div>
+
+            <div class="sidebar-item">
+                <div class="sidebar-icon hackverse">H2</div>
+                <div class="sidebar-content">
+                    <div class="sidebar-title">Hackverse 2.0</div>
+                    <div class="sidebar-subtitle">Chandigarh University</div>
+                    <div class="sidebar-meta">
+                        <span class="prize">₹ 1,00,000</span>
+                        <span class="participants">172 Registered</span>
+                    </div>
+                    <div class="time-left">22 days left</div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="event-image">
+                🎮
+            </div>
+            
+            <div class="event-content">
+                <h1 class="event-title">Gamified Learning Application Presentation</h1>
+                <p class="event-organizer">Hackathon</p>
+                
+                <div class="event-meta">
+                    <div class="meta-item">
+                        <span>🌐</span>
+                        <span>Online</span>
+                    </div>
+                    <div class="meta-item">
+                        <span>📅</span>
+                        <span>Deadline: Jul 8, 2025</span>
+                    </div>
+                    <div class="meta-item">
+                        <span>⏱</span>
+                        <span>2 days ago</span>
+                    </div>
+                    <div class="meta-item">
+                        <span>👥</span>
+                        <span>Official website</span>
+                    </div>
+                </div>
+
+                <div class="eligibility-tags">
+                    <span class="tag">Engineering</span>
+                    <span class="tag">Students</span>
+                    <span class="tag">MBA Students</span>
+                    <span class="tag">Undergraduate</span>
+                    <span class="tag">Postgraduate</span>
+                </div>
+
+                <div class="prize-amount">₹ 99</div>
+                
+                <button class="register-button">Register</button>
+
+                <div class="event-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">2,106</div>
+                        <div class="stat-label">Visits</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">1-4 Members</div>
+                        <div class="stat-label">Team Size</div>
+                    </div>
+                </div>
+
+                <div class="event-details">
+                    <div class="detail-section">
+                        <h3 class="detail-title">Eligibility</h3>
+                        <div class="detail-content">
+                            Engineering • Students • MBA Students • Undergraduate • Postgraduate
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h3 class="detail-title">All that you need to know about Gamified Learning Application Presentation</h3>
+                        <div class="detail-content">
+                            <p><strong>Key Details:</strong></p>
+                            <ul class="detail-list">
+                                <li><strong>Theme:</strong> Gamified Learning for Enhanced Engagement</li>
+                                <li><strong>Duration:</strong> 48 Hours</li>
+                                <li><strong>Entry Fee:</strong> ₹99 Cash Prize for the Winning Team!</li>
+                            </ul>
+
+                            <p style="margin-top: 16px;"><strong>Important Dates:</strong></p>
+                            <ul class="detail-list">
+                                <li><strong>Registration Opens:</strong> Friday, July 03, 2025</li>
+                                <li><strong>Registration Closes:</strong> Monday, July 16, 2025</li>
+                                <li><strong>Hackathon Kick-off & Opening Ceremony:</strong> Friday, July 16, 2025 (6:00 PM IST)</li>
+                                <li><strong>Submission Deadline:</strong> Sunday, July 20, 2025 (7:00 PM IST)</li>
+                                <li><strong>Judging Period:</strong> Sunday, July 20, 2025 (7:00 PM IST) - Monday, July 21, 202
