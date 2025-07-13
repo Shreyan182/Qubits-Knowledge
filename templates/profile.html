@@ -1,0 +1,371 @@
+{% extends 'base.html' %} {% block extra_head %}
+<title>Profile - {{ user_name }}</title>
+<style>
+  body {
+    overflow-x: hidden;
+  }
+  .profile-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(30, 41, 59, 0.25);
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .profile-backdrop.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .profile-slideout {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 420px;
+    max-width: 100vw;
+    height: 100vh;
+    background: #fff;
+    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.77, 0, 0.18, 1);
+    display: flex;
+    flex-direction: column;
+    will-change: transform;
+  }
+  .profile-slideout.show {
+    transform: translateX(0);
+  }
+  @media (max-width: 600px) {
+    .profile-slideout {
+      width: 100vw;
+      border-radius: 0;
+      box-shadow: none;
+    }
+  }
+  .profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 28px;
+    background: linear-gradient(135deg, #fff 0%, #fafbfc 100%);
+    border-bottom: 1px solid #f0f0f0;
+    flex-shrink: 0;
+  }
+  .profile-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    padding: 4px;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .close-btn:hover {
+    background: #f3f4f6;
+    color: #2563eb;
+    transform: rotate(90deg);
+  }
+  .profile-content-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .profile-info {
+    padding: 32px 28px 16px 28px;
+    border-bottom: 1px solid #f0f0f0;
+    background: #fafbfc;
+    flex-shrink: 0;
+  }
+  .profile-details {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+  .avatar-container {
+    position: relative;
+    width: 64px;
+    height: 64px;
+  }
+  .profile-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #2563eb;
+    color: #fff;
+    font-size: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+  }
+  .profile-badge {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    background: #facc15;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  }
+  .profile-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .profile-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+  .profile-email {
+    font-size: 15px;
+    color: #555;
+    margin-bottom: 6px;
+  }
+  .view-profile-btn {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    transition: color 0.2s;
+  }
+  .view-profile-btn:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+  }
+  .missing-out-card {
+    margin-top: 12px;
+    background: #fef9c3;
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: 0 1px 4px rgba(250, 204, 21, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .missing-out-title {
+    font-weight: 600;
+    color: #b45309;
+    font-size: 16px;
+  }
+  .missing-out-text {
+    color: #92400e;
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  .complete-profile-btn {
+    background: #fde047;
+    color: #92400e;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .complete-profile-btn:hover {
+    background: #facc15;
+    color: #78350f;
+  }
+  .menu-section {
+    flex: 1 1 auto;
+    padding: 24px 28px 0 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 0;
+  }
+  .menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f3f4f6;
+    cursor: pointer;
+    color: #1e293b;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background 0.15s;
+  }
+  .menu-item:last-child {
+    border-bottom: none;
+  }
+  .menu-item:hover {
+    background: #f3f4f6;
+    color: #2563eb;
+  }
+  .menu-icon {
+    font-size: 20px;
+    color: #64748b;
+    width: 28px;
+    text-align: center;
+  }
+  .logout-container {
+    padding: 24px 28px 32px 28px;
+    border-top: 1px solid #f0f0f0;
+    background: #fff;
+    flex-shrink: 0;
+  }
+  .logout-btn {
+    width: 100%;
+    background: #ef4444;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 0;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .logout-btn:hover {
+    background: #dc2626;
+  }
+  .notification {
+    position: fixed;
+    top: 24px;
+    right: 32px;
+    z-index: 2000;
+    background: #2563eb;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .notification.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="profile-backdrop" id="profileBackdrop"></div>
+<div class="profile-slideout" id="profileSlideout">
+  <div class="profile-header">
+    <h1 class="profile-title">Profile</h1>
+    <button class="close-btn" onclick="closeProfile()" title="Close Profile">
+      ×
+    </button>
+  </div>
+  <div class="profile-content-scroll">
+    <div class="profile-info">
+      <div class="profile-details">
+        <div class="avatar-container">
+          <div class="profile-avatar">{{ user_name|first|upper }}</div>
+          <div class="profile-badge">★</div>
+        </div>
+        <div class="profile-text">
+          <div class="profile-name">{{ user_name }}</div>
+          <div class="profile-email">{{ user_email }}</div>
+          <a href="#" class="view-profile-btn">View Profile →</a>
+        </div>
+      </div>
+      <div class="missing-out-card">
+        <div class="missing-out-title">You're missing out</div>
+        <div class="missing-out-text">
+          on opportunities to create an impact!
+        </div>
+        <a href="#" class="complete-profile-btn">Complete my profile →</a>
+      </div>
+    </div>
+    <div class="menu-section">
+      <div class="menu-item" onclick="handleMenuClick('Dashboard')">
+        <span class="menu-icon">🏠</span> Dashboard
+      </div>
+      <div class="menu-item" onclick="handleMenuClick('My Events')">
+        <span class="menu-icon">📅</span> My Events
+      </div>
+      <div class="menu-item" onclick="handleMenuClick('My Submissions')">
+        <span class="menu-icon">📂</span> My Submissions
+      </div>
+      <div class="menu-item" onclick="handleMenuClick('Achievements')">
+        <span class="menu-icon">🏆</span> Achievements
+      </div>
+      <div class="menu-item" onclick="handleMenuClick('Settings')">
+        <span class="menu-icon">⚙️</span> Settings
+      </div>
+      <div class="menu-item" onclick="handleMenuClick('Help Center')">
+        <span class="menu-icon">❓</span> Help Center
+      </div>
+      <div class="menu-item" onclick="handleMenuClick('Feedback')">
+        <span class="menu-icon">💬</span> Feedback
+      </div>
+    </div>
+  </div>
+  <div class="logout-container">
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+</div>
+<div class="notification" style="display: none"></div>
+{% endblock %} {% block extra_js %}
+<script>
+  // Slideout logic
+  function openProfile() {
+    document.getElementById("profileSlideout").classList.add("show");
+    document.getElementById("profileBackdrop").classList.add("show");
+    document.body.style.overflow = "hidden";
+  }
+  function closeProfile() {
+    document.getElementById("profileSlideout").classList.remove("show");
+    document.getElementById("profileBackdrop").classList.remove("show");
+    document.body.style.overflow = "";
+    setTimeout(function () {
+      window.location.href = "{% url 'home' %}";
+    }, 350);
+  }
+  // Close on backdrop click
+  document.getElementById("profileBackdrop").onclick = closeProfile;
+  // Open on page load
+  window.onload = openProfile;
+
+  function logout() {
+    showNotification("Logged out successfully!");
+    setTimeout(function () {
+      window.location.href = "{% url 'login' %}";
+    }, 1200);
+  }
+  function handleMenuClick(menu) {
+    showNotification("Opening " + menu);
+    // Add navigation logic here if needed
+  }
+  function showNotification(message) {
+    let notification = document.querySelector(".notification");
+    notification.textContent = message;
+    notification.style.display = "block";
+    notification.classList.add("show");
+    setTimeout(() => {
+      notification.classList.remove("show");
+      notification.style.display = "none";
+    }, 2000);
+  }
+</script>
+{% endblock %}

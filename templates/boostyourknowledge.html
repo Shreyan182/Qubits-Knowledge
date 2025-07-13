@@ -1,0 +1,774 @@
+{% extends "base.html" %} {% block title %}Boost Your Coding & UI/UX Skills
+{%endblock %} {% block extra_head %}
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .header {
+    text-align: center;
+    color: white;
+    margin-bottom: 40px;
+    padding: 40px 0;
+  }
+
+  .header h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .learning-paths {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 50px;
+  }
+
+  .path-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transform: translateY(0);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .path-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #4f46e5, #7c3aed);
+  }
+
+  .path-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  .path-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: white;
+  }
+
+  .coding-icon {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  }
+
+  .design-icon {
+    background: linear-gradient(135deg, #ec4899, #f97316);
+  }
+
+  .path-card h2 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    color: #1f2937;
+  }
+
+  .path-card p {
+    color: #6b7280;
+    margin-bottom: 25px;
+    line-height: 1.6;
+  }
+
+  .skill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 25px;
+  }
+
+  .skill-tag {
+    background: #f3f4f6;
+    color: #4b5563;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .video-section {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  }
+
+  .video-section h3 {
+    color: #1f2937;
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .video-card {
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .video-card:hover {
+    background: #f3f4f6;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .video-card h4 {
+    color: #1f2937;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+  }
+
+  .video-card p {
+    color: #6b7280;
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+  }
+
+  .video-meta {
+    display: flex;
+    justify-content: between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #9ca3af;
+  }
+
+  .channel-name {
+    font-weight: 600;
+    color: #4f46e5;
+  }
+
+  .duration {
+    background: #4f46e5;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+  }
+
+  .progress-section {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .progress-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: conic-gradient(#4f46e5 0deg 0deg, #e5e7eb 0deg 360deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    position: relative;
+  }
+
+  .progress-circle::before {
+    content: "";
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: white;
+    position: absolute;
+  }
+
+  .progress-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    z-index: 1;
+  }
+
+  .start-btn {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+  }
+
+  .tips-section {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 30px;
+  }
+
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .tip-card {
+    background: linear-gradient(135deg, #f0f9ff, #e0e7ff);
+    border-radius: 10px;
+    padding: 20px;
+    border-left: 4px solid #4f46e5;
+  }
+
+  .tip-card h4 {
+    color: #1f2937;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+  }
+
+  .tip-card p {
+    color: #6b7280;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .floating-elements {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .floating-element {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .header h1 {
+      font-size: 2.5rem;
+    }
+
+    .learning-paths {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .path-card {
+      padding: 20px;
+    }
+
+    .video-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .tips-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .container {
+      padding: 10px;
+    }
+
+    .header {
+      padding: 20px 0;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+    }
+
+    .header p {
+      font-size: 1rem;
+    }
+  }
+</style>
+{% endblock %}{% block content %}
+<div class="floating-elements">
+  <div
+    class="floating-element"
+    style="width: 60px; height: 60px; top: 10%; left: 10%; animation-delay: 0s"
+  ></div>
+  <div
+    class="floating-element"
+    style="width: 40px; height: 40px; top: 20%; right: 10%; animation-delay: 2s"
+  ></div>
+  <div
+    class="floating-element"
+    style="
+      width: 80px;
+      height: 80px;
+      bottom: 10%;
+      left: 20%;
+      animation-delay: 4s;
+    "
+  ></div>
+  <div
+    class="floating-element"
+    style="
+      width: 50px;
+      height: 50px;
+      bottom: 20%;
+      right: 20%;
+      animation-delay: 1s;
+    "
+  ></div>
+</div>
+
+<div class="container">
+  <div class="header">
+    <h1>🚀 Boost Your Skills</h1>
+    <p>
+      Master coding and UI/UX design with curated YouTube tutorials and
+      structured learning paths
+    </p>
+  </div>
+
+  <div class="learning-paths">
+    <div class="path-card">
+      <div class="path-icon coding-icon">💻</div>
+      <h2>Coding Mastery</h2>
+      <p>
+        Learn programming languages, frameworks, and development best practices
+        from industry experts.
+      </p>
+      <div class="skill-list">
+        <span class="skill-tag">JavaScript</span>
+        <span class="skill-tag">Python</span>
+        <span class="skill-tag">React</span>
+        <span class="skill-tag">Node.js</span>
+        <span class="skill-tag">HTML/CSS</span>
+      </div>
+      <button class="start-btn" onclick="showCodingVideos()">
+        Start Learning
+      </button>
+    </div>
+
+    <div class="path-card">
+      <div class="path-icon design-icon">🎨</div>
+      <h2>UI/UX Design</h2>
+      <p>
+        Master design principles, user research, prototyping, and create
+        stunning user experiences.
+      </p>
+      <div class="skill-list">
+        <span class="skill-tag">Figma</span>
+        <span class="skill-tag">Adobe XD</span>
+        <span class="skill-tag">Prototyping</span>
+        <span class="skill-tag">User Research</span>
+        <span class="skill-tag">Design Systems</span>
+      </div>
+      <button class="start-btn" onclick="showDesignVideos()">
+        Start Learning
+      </button>
+    </div>
+  </div>
+
+  <div class="progress-section">
+    <h2>Your Learning Progress</h2>
+    <div class="progress-circle">
+      <div class="progress-text">0%</div>
+    </div>
+    <p>Start your journey and track your progress as you complete tutorials</p>
+  </div>
+
+  <div id="coding-videos" class="video-section" style="display: none">
+    <h3>💻 Coding Tutorials</h3>
+    <div class="video-grid">
+      <div
+        class="video-card"
+        onclick="openVideo('https://www.youtube.com/watch?v=PkZNo7MFNFg')"
+      >
+        <h4>Learn JavaScript in 1 Hour</h4>
+        <p>
+          Complete JavaScript crash course for beginners covering variables,
+          functions, objects, and DOM manipulation.
+        </p>
+        <div class="video-meta">
+          <span class="channel-name">Programming with Mosh</span>
+          <span class="duration">1h 8m</span>
+        </div>
+      </div>
+
+      <div
+        class="video-card"
+        onclick="openVideo('https://www.youtube.com/watch?v=_uQrJ0TkZlc')"
+      >
+        <h4>Python Tutorial for Beginners</h4>
+        <p>
+          Learn Python programming from scratch with practical examples and
+          hands-on projects.
+        </p>
+        <div class="video-meta">
+          <span class="channel-name">Programming with Mosh</span>
+          <span class="duration">6h 14m</span>
+        </div>
+      </div>
+
+      <div
+        class="video-card"
+        onclick="openVideo('https://www.youtube.com/watch?v=Ke90Tje7VS0')"
+      >
+        <h4>React Tutorial for Beginners</h4>
+        <p>
+          Complete React crash course covering components, state, props, and
+          hooks for modern web development.
+        </p>
+        <div class="video-meta">
+          <span class="channel-name">Programming with Mosh</span>
+          <span class="duration">1h 38m</span>
+        </div>
+      </div>
+
+      <div
+        class="video-card"
+        onclick="openVideo('https://www.youtube.com/watch?v=fBNz5xF-Kx4')"
+      >
+        <h4>Node.js Tutorial for Beginners</h4>
+        <p>
+          Learn server-side JavaScript with Node.js, including modules, npm, and
+          building web applications.
+        </p>
+        <div class="video-meta">
+          <span class="channel-name">Programming with Mosh</span>
+          <span class="duration">1h 16m</span>
+        </div>
+      </div>
+
+      <div
+        class="video-card"
+        onclick="openVideo('https://www.youtube.com/watch?v=UB1O30fR-EE')"
+      >
+        <h4>HTML & CSS Full Course</h4>
+        <p>
+          Master the fundamentals of web development with comprehensive HTML and
+          CSS tutorial.
+        </p>
+        <div class="video-meta">
+          <span class="channel-name">freeCodeCamp</span>
+          <span class="duration">11h 30m</span>
+        </div>
+      </div>
+
+      <div
+        class="video-card"
+        onclick="openVideo('https://www.youtube.com/watch?v=DHjqpvDnNGE')"
+      >
+        <h4>Git & GitHub Tutorial</h4>
+        <p>
+          Learn version control with Git and GitHub for collaborative software
+          development.
+        </p>
+        <div class="video-meta">
+          <span class="channel-name">Traversy Media</span>
+          <span class="duration">1h 9m</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="design-videos" class="video-section" style="display: none">
+    <h3>🎨 UI/UX Design Tutorials</h3>
+    <div class="video-grid">
+      <div
+        class="video-card"
+        onclick="openVideo('https://www.youtube.com/watch?v=c9Wg6Cb_YlU')"
+      >
+        <h4>Figma Tutorial for Beginners</h4>
+        <p>
+          Complete Figma crash course covering interface design, prototyping,
+          and collaboration features.
+        </p>
+        <div class="video-meta">
+          <span class="channel-name">DesignCourse</span>
+          <span class="duration">1h 25m</span>
+        </div>
+      </div>
+
+      <div
+        class="video-card"
+        onclick="openVideo('https://www.youtube.com/watch?v=68w2VwalD5w')"
+      >
+        <h4>UX Design Process</h4>
+        <p>
+          Learn the complete UX design process from research to testing and
+          implementation.
+        </p>
+        <div class="video-meta">
+          <span class="channel-name">AJ&Smart</span>
+          <span class="duration">45m</span>
+        </div>
+      </div>
+
+      <div
+        class="video-card"
+        onclick="openVideo('https://www.youtube.com/watch?v=0JCUH5daCCE')"
+      >
+        <h4>UI Design Fundamentals</h4>
+        <p>
+          Master the principles of user interface design including typography,
+          color theory, and layout.
+        </p>
+        <div class="video-meta">
+          <span class="channel-name">Flux</span>
+          <span class="duration">1h 15m</span>
+        </div>
+      </div>
+
+      <div
+        class="video-card"
+        onclick="openVideo('https://www.youtube.com/watch?v=YiLUYf4HDh4')"
+      >
+        <h4>Adobe XD Tutorial</h4>
+        <p>
+          Complete Adobe XD course for UI/UX design and prototyping from
+          beginner to advanced.
+        </p>
+        <div class="video-meta">
+          <span class="channel-name">Adobe Creative Cloud</span>
+          <span class="duration">2h 10m</span>
+        </div>
+      </div>
+
+      <div
+        class="video-card"
+        onclick="openVideo('https://www.youtube.com/watch?v=_6Tl2_eM0DE')"
+      >
+        <h4>Design Systems Explained</h4>
+        <p>
+          Learn how to create and maintain design systems for consistent and
+          scalable design.
+        </p>
+        <div class="video-meta">
+          <span class="channel-name">Design Systems</span>
+          <span class="duration">35m</span>
+        </div>
+      </div>
+
+      <div
+        class="video-card"
+        onclick="openVideo('https://www.youtube.com/watch?v=QwF9a56WFWA')"
+      >
+        <h4>User Research Methods</h4>
+        <p>
+          Master user research techniques including interviews, surveys, and
+          usability testing.
+        </p>
+        <div class="video-meta">
+          <span class="channel-name">UX Mastery</span>
+          <span class="duration">52m</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tips-section">
+    <h3>💡 Learning Tips & Best Practices</h3>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <h4>🎯 Set Clear Goals</h4>
+        <p>
+          Define what you want to achieve and create a structured learning plan
+          with specific milestones.
+        </p>
+      </div>
+      <div class="tip-card">
+        <h4>⚡ Practice Regularly</h4>
+        <p>
+          Dedicate at least 30 minutes daily to coding or design practice to
+          build muscle memory.
+        </p>
+      </div>
+      <div class="tip-card">
+        <h4>🔨 Build Projects</h4>
+        <p>
+          Apply your knowledge by building real projects that showcase your
+          skills to potential employers.
+        </p>
+      </div>
+      <div class="tip-card">
+        <h4>👥 Join Communities</h4>
+        <p>
+          Connect with other learners and professionals in online communities
+          for support and networking.
+        </p>
+      </div>
+      <div class="tip-card">
+        <h4>📚 Stay Updated</h4>
+        <p>
+          Follow industry blogs, newsletters, and social media to stay current
+          with latest trends and technologies.
+        </p>
+      </div>
+      <div class="tip-card">
+        <h4>🔄 Review & Reflect</h4>
+        <p>
+          Regularly review your progress and reflect on what you've learned to
+          reinforce your knowledge.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}{% block extra_js %}
+<script>
+  let progress = 0;
+  const totalVideos = 12;
+  const watchedVideos = new Set();
+
+  function showCodingVideos() {
+    document.getElementById("coding-videos").style.display = "block";
+    document.getElementById("design-videos").style.display = "none";
+    document
+      .getElementById("coding-videos")
+      .scrollIntoView({ behavior: "smooth" });
+  }
+
+  function showDesignVideos() {
+    document.getElementById("design-videos").style.display = "block";
+    document.getElementById("coding-videos").style.display = "none";
+    document
+      .getElementById("design-videos")
+      .scrollIntoView({ behavior: "smooth" });
+  }
+
+  function openVideo(url) {
+    window.open(url, "_blank");
+
+    // Mark video as watched and update progress
+    if (!watchedVideos.has(url)) {
+      watchedVideos.add(url);
+      progress = (watchedVideos.size / totalVideos) * 100;
+      updateProgress();
+    }
+  }
+
+  function updateProgress() {
+    const progressCircle = document.querySelector(".progress-circle");
+    const progressText = document.querySelector(".progress-text");
+
+    const degrees = (progress / 100) * 360;
+    progressCircle.style.background = `conic-gradient(#4f46e5 0deg ${degrees}deg, #e5e7eb ${degrees}deg 360deg)`;
+    progressText.textContent = Math.round(progress) + "%";
+
+    // Save progress to localStorage
+    localStorage.setItem("learningProgress", progress);
+    localStorage.setItem("watchedVideos", JSON.stringify([...watchedVideos]));
+  }
+
+  // Load saved progress
+  function loadProgress() {
+    const savedProgress = localStorage.getItem("learningProgress");
+    const savedWatchedVideos = localStorage.getItem("watchedVideos");
+
+    if (savedProgress) {
+      progress = parseFloat(savedProgress);
+      updateProgress();
+    }
+
+    if (savedWatchedVideos) {
+      const videoArray = JSON.parse(savedWatchedVideos);
+      videoArray.forEach((video) => watchedVideos.add(video));
+    }
+  }
+
+  // Initialize on page load
+  window.addEventListener("load", loadProgress);
+
+  // Add smooth scrolling for better UX
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+      e.preventDefault();
+      document.querySelector(this.getAttribute("href")).scrollIntoView({
+        behavior: "smooth",
+      });
+    });
+  });
+
+  // Add animation on scroll
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: "0px 0px -50px 0px",
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.style.animation = "fadeInUp 0.6s ease forwards";
+      }
+    });
+  }, observerOptions);
+
+  document
+    .querySelectorAll(".path-card, .video-card, .tip-card")
+    .forEach((el) => {
+      observer.observe(el);
+    });
+</script>
+{% endblock %}

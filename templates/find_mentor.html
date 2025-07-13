@@ -1,0 +1,1235 @@
+{% extends "base.html" %} {% block title %}Mentorship Listing & Profile Page
+{%endblock %} {% block extra_head %}
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+/>
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  rel="stylesheet"
+/>
+<style>
+  /* ...copy your CSS styles from the original file here... */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+  }
+  .navbar {
+    background: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 12px 0;
+  }
+  .search-container {
+    position: relative;
+    width: 300px;
+  }
+  .search-input {
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 8px 20px;
+    width: 100%;
+    font-size: 14px;
+  }
+  .search-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+  }
+  .filter-btn {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 8px 16px;
+    margin: 0 4px;
+    color: #333;
+    font-size: 14px;
+    transition: all 0.3s ease;
+  }
+  .filter-btn:hover {
+    border-color: #007bff;
+    color: #007bff;
+  }
+  .filter-btn.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+  }
+  .mentor-match-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mentor-card {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .mentor-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+  .mentor-card.active {
+    border-color: #007bff;
+    background: #f8f9ff;
+  }
+  .mentor-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .rating-badge {
+    background: #ffc107;
+    color: #333;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .top-mentor-badge {
+    background: #ffc107;
+    color: #333;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 500;
+  }
+  .company-logo {
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
+    object-fit: cover;
+  }
+  .mentor-profile {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 10px rgba(0, 0, 2, 0.1);
+  }
+  .profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 20px;
+  }
+  .available-badge {
+    background: #28a745;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .service-card {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .service-badge {
+    position: absolute;
+    top: -8px;
+    right: 16px;
+    background: #dc3545;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+  }
+  .best-seller-badge {
+    background: #ff6b35;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+  }
+  .price-original {
+    text-decoration: line-through;
+    color: #666;
+    font-size: 14px;
+  }
+  .price-discounted {
+    color: #28a745;
+    font-weight: bold;
+    font-size: 18px;
+  }
+  .book-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 14px;
+    width: 100%;
+    transition: all 0.3s ease;
+  }
+  .book-btn:hover {
+    background: #0056b3;
+  }
+  .review-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+  .review-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 12px;
+  }
+  .review-rating {
+    background: #28a745;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .topic-tag {
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 6px 12px;
+    margin: 4px;
+    font-size: 14px;
+    color: #333;
+    display: inline-block;
+  }
+  .edu-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .edu-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    margin-right: 12px;
+  }
+  .sidebar {
+    height: calc(100vh - 80px);
+    overflow-y: auto;
+    padding-right: 8px;
+  }
+  .sidebar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .sidebar::--webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  .sidebar::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 10px;
+  }
+  .main-content {
+    height: calc(100vh - 80px);
+    overflow-y: auto;
+  }
+  .engagement-stats {
+    display: flex;
+    gap: 20px;
+    margin: 16px 0;
+  }
+  .engagement-stat {
+    text-align: center;
+  }
+  .engagement-number {
+    font-size: 18px;
+    font-weight: bold;
+    color: #007bff;
+  }
+  .engagement-label {
+    font-size: 12px;
+    color: #666;
+  }
+  .rating-stars {
+    color: #ffc107;
+    font-size: 14px;
+  }
+  .discount-text {
+    color: #28a745;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .view-profile-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 24px;
+    font-weight: 500;
+    width: 100%;
+    margin-top: 16px;
+  }
+  .lang-tag {
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 4px 8px;
+    margin: 2px;
+    font-size: 12px;
+    color: #333;
+  }
+  .section-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #333;
+  }
+  .company-text {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+</style>
+{% endblock %} {% block content %}
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <div class="d-flex align-items-center">
+      <button class="btn btn-link text-dark me-3" onclick="history.back()">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+    </div>
+    <div class="d-flex align-items-center gap-3">
+      <div class="search-container">
+        <input
+          type="text"
+          class="form-control search-input"
+          placeholder="Search by Skill, Industry..."
+        />
+        <i class="fas fa-search search-icon"></i>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <button class="btn filter-btn">
+          <i class="fas fa-sort-amount-down me-2"></i>Sort By
+        </button>
+        <button class="btn filter-btn">
+          <i class="fas fa-filter me-2"></i>Filters
+        </button>
+        <button class="btn filter-btn">
+          <i class="fas fa-user-check me-2"></i>Availability
+        </button>
+        <button class="btn filter-btn active">
+          <i class="fas fa-star me-2"></i>Top Mentors
+        </button>
+        <button class="btn filter-btn">
+          <i class="fas fa-free-code-camp me-2"></i>Free Services
+        </button>
+      </div>
+      <button class="btn mentor-match-btn" title="Mentor Match">
+        <i class="fas fa-user-friends"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container-fluid mt-3">
+  <div class="row">
+    <!-- Left Sidebar - Mentor List -->
+    <div class="col-lg-4 col-md-5">
+      <div class="sidebar">
+        <!-- Mentor Card 1 -->
+        <div class="mentor-card active" onclick="selectMentor(this, 'pravin')">
+          <div class="d-flex align-items-center">
+            <img
+              src="https://randomuser.me/api/portraits/men/32.jpg"
+              alt="Pravin Chaudhary"
+              class="mentor-avatar me-3"
+              onerror="this.onerror=null;this.src='https://via.placeholder.com/48x48?text=No+Image';"
+            />
+            <div class="flex-grow-1">
+              <div class="d-flex align-items-center justify-content-between">
+                <h6 class="mb-0">Pravin Chaudhary</h6>
+                <div class="d-flex align-items-center gap-2">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Logo_of_Capgemini.svg/2560px-Logo_of_Capgemini.svg.png"
+                    alt="Capgemini"
+                    class="company-logo"
+                  />
+                  <span class="rating-badge">★ 4.9</span>
+                  <span class="top-mentor-badge">Top Mentor</span>
+                </div>
+              </div>
+              <div class="text-muted small mt-1">
+                <i class="fas fa-briefcase me-1"></i>18 years
+              </div>
+              <div class="text-muted small">
+                <i class="fas fa-tag me-1"></i>Business And Management
+              </div>
+              <div class="text-muted small">
+                <i class="fas fa-users me-1"></i>18 Reviews
+              </div>
+              <div class="text-muted small">
+                <span
+                  >ISB Hyderabad | NIT Trichy, Symbiosis | Ex- Genpoct,
+                  Flipkart, Johnson & Johnson, Britannia, ITC ltd [Gen2|
+                  Expert</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Mentor Card 2 -->
+        <div class="mentor-card" onclick="selectMentor(this, 'prashant')">
+          <div class="d-flex align-items-center">
+            <img
+              src="https://randomuser.me/api/portraits/men/45.jpg"
+              alt="Prashant Chaudhary"
+              class="mentor-avatar me-3"
+              onerror="this.onerror=null;this.src='https://via.placeholder.com/48x48?text=No+Image';"
+            />
+            <div class="flex-grow-1">
+              <div class="d-flex align-items-center justify-content-between">
+                <h6 class="mb-0">Prashant Chaudhary</h6>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="rating-badge">★ 5</span>
+                  <span class="top-mentor-badge">Top Mentor</span>
+                </div>
+              </div>
+              <div class="text-muted small mt-1">
+                <i class="fas fa-briefcase me-1"></i>3 years
+              </div>
+              <div class="text-muted small">
+                <i class="fas fa-tag me-1"></i>Business And Management
+              </div>
+              <div class="text-muted small">
+                <i class="fas fa-users me-1"></i>73 Reviews
+              </div>
+              <div class="text-muted small">
+                <span
+                  >Lead - Strategy & Market Dev @Sharaf Connect, United...</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Mentor Card 3 -->
+        <div class="mentor-card" onclick="selectMentor(this, 'ankit')">
+          <div class="d-flex align-items-center">
+            <img
+              src="https://randomuser.me/api/portraits/men/77.jpg"
+              alt="Ankit Vichiede"
+              class="mentor-avatar me-3"
+              onerror="this.onerror=null;this.src='https://via.placeholder.com/48x48?text=No+Image';"
+            />
+            <div class="flex-grow-1">
+              <div class="d-flex align-items-center justify-content-between">
+                <h6 class="mb-0">Ankit Vichiede</h6>
+                <div class="d-flex align-items-center gap-2">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/2560px-Google_2015_logo.svg.png"
+                    alt="Google"
+                    class="company-logo"
+                  />
+                  <span class="rating-badge">★ 4.7</span>
+                  <span class="top-mentor-badge">Top Mentor</span>
+                </div>
+              </div>
+              <div class="text-muted small mt-1">
+                <i class="fas fa-briefcase me-1"></i>7 years
+              </div>
+              <div class="text-muted small">
+                <i class="fas fa-tag me-1"></i>Engineering, Technology & Data
+              </div>
+              <div class="text-muted small">
+                <i class="fas fa-users me-1"></i>112 Reviews
+              </div>
+              <div class="text-muted small">
+                <span>Network Implementation Engineer @Google | BE in...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Mentor Card 4 -->
+        <div class="mentor-card" onclick="selectMentor(this, 'mehul')">
+          <div class="d-flex align-items-center">
+            <img
+              src="https://randomuser.me/api/portraits/men/12.jpg"
+              alt="Mehul Sampath"
+              class="mentor-avatar me-3"
+              onerror="this.onerror=null;this.src='https://via.placeholder.com/48x48?text=No+Image';"
+            />
+            <div class="flex-grow-1">
+              <div class="d-flex align-items-center justify-content-between">
+                <h6 class="mb-0">Mehul Sampath</h6>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="rating-badge">★ 5</span>
+                </div>
+              </div>
+              <div class="text-muted small mt-1">
+                <i class="fas fa-briefcase me-1"></i>1 year
+              </div>
+              <div class="text-muted small">
+                <i class="fas fa-tag me-1"></i>General
+              </div>
+              <div class="text-muted small">
+                <i class="fas fa-users me-1"></i>9 Reviews
+              </div>
+              <div class="text-muted small">
+                <span>Product Marketing at Vodafone Idea | MBA Indian...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Mentor Card 5 -->
+        <div class="mentor-card" onclick="selectMentor(this, 'riya')">
+          <div class="d-flex align-items-center">
+            <img
+              src="https://randomuser.me/api/portraits/women/65.jpg"
+              alt="Riya Shrivastava"
+              class="mentor-avatar me-3"
+              onerror="this.onerror=null;this.src='https://via.placeholder.com/48x48?text=No+Image';"
+            />
+            <div class="flex-grow-1">
+              <div class="d-flex align-items-center justify-content-between">
+                <h6 class="mb-0">Riya Shrivastava</h6>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="rating-badge">★ 4.7</span>
+                  <span class="top-mentor-badge">Top Mentor</span>
+                </div>
+              </div>
+              <div class="text-muted small mt-1">
+                <i class="fas fa-briefcase me-1"></i>3 years
+              </div>
+              <div class="text-muted small">
+                <i class="fas fa-tag me-1"></i>Business And Management
+              </div>
+              <div class="text-muted small">
+                <i class="fas fa-users me-1"></i>218 Reviews
+              </div>
+              <div class="text-muted small">
+                <span
+                  >Strategy - CEO's Office @SasDoctors | 3 years Wipro...</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- More mentor cards... -->
+      </div>
+    </div>
+    <!-- Right Panel - Mentor Profile -->
+    <div class="col-lg-8 col-md-7">
+      <div class="main-content">
+        <div class="mentor-profile">
+          <!-- Profile Header -->
+          <div class="profile-header">
+            <img
+              src="https://randomuser.me/api/portraits/men/32.jpg"
+              alt="Pravin Chaudhary"
+              class="profile-avatar"
+              onerror="this.onerror=null;this.src='https://via.placeholder.com/80x80?text=No+Image';"
+            />
+            <div class="flex-grow-1">
+              <div class="d-flex align-items-center gap-3 mb-2">
+                <span class="available-badge"
+                  ><i class="fas fa-bolt me-1"></i>Available</span
+                >
+                <div class="rating-stars">★ 4.9</div>
+                <span class="top-mentor-badge">Top Mentor</span>
+              </div>
+              <h3 class="mb-2">Pravin Chaudhary</h3>
+              <div class="company-text">
+                ISB Hyderabad | NIT Trichy, Symbiosis | Ex- Genpact, Flipkart,
+                Johnson & Johnson, Britannia, ITC Ltd [Gen2] Expert
+              </div>
+              <div class="engagement-stats">
+                <div class="engagement-stat">
+                  <div class="engagement-number">18</div>
+                  <div class="engagement-label">years</div>
+                </div>
+                <div class="engagement-stat">
+                  <div class="engagement-number">Business And Management</div>
+                  <div class="engagement-label">Domain</div>
+                </div>
+                <div class="engagement-stat">
+                  <div class="engagement-number">35</div>
+                  <div class="engagement-label">Mentee Engagements</div>
+                </div>
+              </div>
+              <div class="text-muted small">(18 Reviews)</div>
+            </div>
+            <div class="ms-3">
+              <button class="btn btn-outline-secondary btn-sm me-2">
+                <i class="fas fa-heart"></i>
+              </button>
+              <button class="btn btn-outline-secondary btn-sm">
+                <i class="fab fa-linkedin"></i>
+              </button>
+            </div>
+          </div>
+          <button class="view-profile-btn">View profile</button>
+          <!-- Services Section -->
+          <div class="mt-4">
+            <h5 class="section-title">Services</h5>
+            <!-- Service Card 1 -->
+            <div class="service-card">
+              <div class="service-badge">1:1 Call</div>
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="best-seller-badge">Best Seller</span>
+                  </div>
+                  <h6 class="mb-1">Quick Call</h6>
+                  <div class="text-muted small mb-2">
+                    <i class="fas fa-clock me-1"></i>15 Min
+                  </div>
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="price-original">₹59</span>
+                    <span class="price-discounted">₹49</span>
+                    <span class="discount-text">Get (15% OFF) ₹41</span>
+                  </div>
+                </div>
+                <div>
+                  <button class="book-btn">Book Now</button>
+                </div>
+              </div>
+            </div>
+            <!-- Service Card 2 -->
+            <div class="service-card">
+              <div class="service-badge">1:1 Call</div>
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h6 class="mb-1">Career Advice</h6>
+                  <div class="text-muted small mb-2">
+                    <i class="fas fa-clock me-1"></i>15 Min
+                  </div>
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="price-original">₢499</span>
+                    <span class="price-discounted">₹99</span>
+                    <span class="discount-text">Get (15% OFF) ₹84</span>
+                  </div>
+                </div>
+                <div>
+                  <button class="book-btn">Book Now</button>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-link p-0 text-primary">View more</button>
+          </div>
+          <!-- About Mentor -->
+          <div class="mt-4">
+            <h5 class="section-title">About Mentor</h5>
+            <p class="text-muted">
+              With 18 years in entrepreneurship, leadership, and advanced
+              analytics, I've worked with ITC, Britannia, J&J, and Flipkart, and
+              consulted for various startups. Currently brand manager at Jio.
+              I'm passionate about digital transformation, I excel in business
+              management, storytelling, and interview prep. I've mentored
+              students from top institutes like IITs, IIMs, and ISB Hyderabad,
+              helping them secure dream jobs and navigate their careers.
+            </p>
+          </div>
+          <!-- Reviews -->
+          <div class="mt-4">
+            <h5 class="section-title">Reviews</h5>
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div class="rating-stars display-4">4.9</div>
+              <div>
+                <div class="rating-stars">★★★★★</div>
+                <div class="text-muted small">Average Rating (18 Reviews)</div>
+              </div>
+            </div>
+            <!-- Review Item 1 -->
+            <div class="review-item">
+              <img
+                src="https://randomuser.me/api/portraits/men/23.jpg"
+                alt="Mayank Kumar"
+                class="review-avatar"
+                onerror="this.onerror=null;this.src='https://via.placeholder.com/32x32?text=No+Img';"
+              />
+              <div class="flex-grow-1">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div>
+                    <strong>Mayank Kumar</strong>
+                    <div class="text-muted small">04 Jul 20, 09:54 AM IST</div>
+                  </div>
+                  <span class="review-rating">5.0★</span>
+                </div>
+                <div class="text-muted small mt-1">Very helpful</div>
+              </div>
+            </div>
+            <!-- Review Item 2 -->
+            <div class="review-item">
+              <img
+                src="https://randomuser.me/api/portraits/men/24.jpg"
+                alt="Yashodivhara Bakliwal"
+                class="review-avatar"
+                onerror="this.onerror=null;this.src='https://via.placeholder.com/32x32?text=No+Img';"
+              />
+              <div class="flex-grow-1">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div>
+                    <strong>Yashodivhara Bakliwal</strong>
+                    <div class="text-muted small">28 Jun 20, 11:06 AM IST</div>
+                  </div>
+                  <span class="review-rating">5.0★</span>
+                </div>
+                <div class="text-muted small mt-1">Good session</div>
+              </div>
+            </div>
+            <!-- Review Item 3 -->
+            <div class="review-item">
+              <img
+                src="https://randomuser.me/api/portraits/women/25.jpg"
+                alt="Aoreya Mahajan"
+                class="review-avatar"
+                onerror="this.onerror=null;this.src='https://via.placeholder.com/32x32?text=No+Img';"
+              />
+              <div class="flex-grow-1">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div>
+                    <strong>Aoreya Mahajan</strong>
+                    <div class="text-muted small">22 Apr 20, 02:43 PM IST</div>
+                  </div>
+                  <span class="review-rating">5.0★</span>
+                </div>
+                <div class="text-muted small mt-1">
+                  Really good feedback and guidance
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-link p-0 text-primary">Show more</button>
+          </div>
+          <!-- Topics -->
+          <div class="mt-4">
+            <h5 class="section-title">Topics</h5>
+            <div class="d-flex flex-wrap">
+              <span class="topic-tag">Ace MBA Entrance Preparations</span>
+              <span class="topic-tag">Change jobs</span>
+              <span class="topic-tag">Get your Resume/CV reviewed</span>
+              <span class="topic-tag">Grow your career</span>
+              <span class="topic-tag">Pass interviews</span>
+            </div>
+          </div>
+          <!-- Fluent in -->
+          <div class="mt-4">
+            <h5 class="section-title">Fluent in</h5>
+            <div class="d-flex flex-wrap">
+              <span class="lang-tag">English</span>
+              <span class="lang-tag">Hindi</span>
+              <span class="lang-tag">Telugu</span>
+            </div>
+          </div>
+          <!-- Education -->
+          <div class="mt-4">
+            <h5 class="section-title">Education</h5>
+            <!-- Edu Item 1 -->
+            <div class="edu-item">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/2/2e/IIM_Ahmedabad_Logo.png"
+                alt="IIM Ahmedabad"
+                class="edu-logo"
+                onerror="this.onerror=null;this.src='https://via.placeholder.com/32x32?text=No+Logo';"
+              />
+              <div>
+                <div class="fw-bold">IIM Ahmedabad</div>
+                <div class="text-muted small">MBA, Business Management</div>
+              </div>
+            </div>
+            <!-- Edu Item 2 -->
+            <div class="edu-item">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Indian_School_of_Business_logo.png"
+                alt="ISB Hyderabad"
+                class="edu-logo"
+                onerror="this.onerror=null;this.src='https://via.placeholder.com/32x32?text=No+Logo';"
+              />
+              <div>
+                <div class="fw-bold">ISB Hyderabad</div>
+                <div class="text-muted small">PGP, Management</div>
+              </div>
+            </div>
+            <!-- Edu Item 3 -->
+            <div class="edu-item">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/6/6d/NIT_Trichy_Logo.png"
+                alt="NIT Trichy"
+                class="edu-logo"
+                onerror="this.onerror=null;this.src='https://via.placeholder.com/32x32?text=No+Logo';"
+              />
+              <div>
+                <div class="fw-bold">NIT Trichy</div>
+                <div class="text-muted small">B.Tech, Computer Science</div>
+              </div>
+            </div>
+          </div>
+          <!-- Contact Mentor -->
+          <div class="mt-4">
+            <h5 class="section-title">Contact Mentor</h5>
+            <div class="d-flex flex-column gap-2">
+              <button class="btn btn-outline-primary">
+                <i class="fas fa-comments me-2"></i>Message
+              </button>
+              <button class="btn btn-outline-success">
+                <i class="fas fa-phone-alt me-2"></i>Call
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block extra_js %}
+<script>
+  // ...copy your JS from the original file here...
+  // Mentor data for demo
+  const mentors = {
+    pravin: {
+      name: "Pravin Chaudhary",
+      avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+      companyLogo:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Logo_of_Capgemini.svg/2560px-Logo_of_Capgemini.svg.png",
+      rating: "4.9",
+      topMentor: true,
+      years: 18,
+      domain: "Business And Management",
+      menteeEngagements: 35,
+      reviews: 18,
+      companyText:
+        "ISB Hyderabad | NIT Trichy, Symbiosis | Ex- Genpact, Flipkart, Johnson & Johnson, Britannia, ITC Ltd [Gen2] Expert",
+      about:
+        "With 18 years in entrepreneurship, leadership, and advanced analytics, I've worked with ITC, Britannia, J&J, and Flipkart, and consulted for various startups. Currently brand manager at Jio. I'm passionate about digital transformation, I excel in business management, storytelling, and interview prep. I've mentored students from top institutes like IITs, IIMs, and ISB Hyderabad, helping them secure dream jobs and navigate their careers.",
+      services: [
+        {
+          name: "Quick Call",
+          bestSeller: true,
+          duration: "15 Min",
+          original: "₹59",
+          discounted: "₹49",
+          discountText: "Get (15% OFF) ₹41",
+        },
+        {
+          name: "Career Advice",
+          bestSeller: false,
+          duration: "15 Min",
+          original: "₢499",
+          discounted: "₹99",
+          discountText: "Get (15% OFF) ₹84",
+        },
+      ],
+      reviewsList: [
+        {
+          avatar: "https://randomuser.me/api/portraits/men/23.jpg",
+          name: "Mayank Kumar",
+          date: "04 Jul 20, 09:54 AM IST",
+          rating: "5.0★",
+          text: "Very helpful",
+        },
+        {
+          avatar: "https://randomuser.me/api/portraits/men/24.jpg",
+          name: "Yashodivhara Bakliwal",
+          date: "28 Jun 20, 11:06 AM IST",
+          rating: "5.0★",
+          text: "Good session",
+        },
+        {
+          avatar: "https://randomuser.me/api/portraits/women/25.jpg",
+          name: "Aoreya Mahajan",
+          date: "22 Apr 20, 02:43 PM IST",
+          rating: "5.0★",
+          text: "Really good feedback and guidance",
+        },
+      ],
+      topics: [
+        "Ace MBA Entrance Preparations",
+        "Change jobs",
+        "Get your Resume/CV reviewed",
+        "Grow your career",
+        "Pass interviews",
+      ],
+      languages: ["English", "Hindi", "Telugu"],
+      education: [
+        {
+          logo: "https://upload.wikimedia.org/wikipedia/commons/2/2e/IIM_Ahmedabad_Logo.png",
+          name: "IIM Ahmedabad",
+          degree: "MBA, Business Management",
+        },
+        {
+          logo: "https://upload.wikimedia.org/wikipedia/commons/6/6e/Indian_School_of_Business_logo.png",
+          name: "ISB Hyderabad",
+          degree: "PGP, Management",
+        },
+        {
+          logo: "https://upload.wikimedia.org/wikipedia/commons/6/6d/NIT_Trichy_Logo.png",
+          name: "NIT Trichy",
+          degree: "B.Tech, Computer Science",
+        },
+      ],
+    },
+    prashant: {
+      name: "Prashant Chaudhary",
+      avatar: "https://randomuser.me/api/portraits/men/45.jpg",
+      companyLogo: "",
+      rating: "5",
+      topMentor: true,
+      years: 3,
+      domain: "Business And Management",
+      menteeEngagements: 73,
+      reviews: 73,
+      companyText: "Lead - Strategy & Market Dev @Sharaf Connect, United...",
+      about:
+        "Strategy leader with 3 years of experience in business management and market development.",
+      services: [
+        {
+          name: "Quick Call",
+          bestSeller: true,
+          duration: "15 Min",
+          original: "₹59",
+          discounted: "₹49",
+          discountText: "Get (15% OFF) ₹41",
+        },
+      ],
+      reviewsList: [
+        {
+          avatar: "https://randomuser.me/api/portraits/men/23.jpg",
+          name: "Mayank Kumar",
+          date: "04 Jul 20, 09:54 AM IST",
+          rating: "5.0★",
+          text: "Very helpful",
+        },
+      ],
+      topics: ["Change jobs", "Get your Resume/CV reviewed"],
+      languages: ["English", "Hindi"],
+      education: [
+        {
+          logo: "https://upload.wikimedia.org/wikipedia/commons/6/6e/Indian_School_of_Business_logo.png",
+          name: "ISB Hyderabad",
+          degree: "PGP, Management",
+        },
+      ],
+    },
+    ankit: {
+      name: "Ankit Vichiede",
+      avatar: "https://randomuser.me/api/portraits/men/77.jpg",
+      companyLogo:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/2560px-Google_2015_logo.svg.png",
+      rating: "4.7",
+      topMentor: true,
+      years: 7,
+      domain: "Engineering, Technology & Data",
+      menteeEngagements: 112,
+      reviews: 112,
+      companyText: "Network Implementation Engineer @Google | BE in...",
+      about:
+        "Google engineer with 7 years of experience in network implementation and data engineering.",
+      services: [
+        {
+          name: "Tech Career Call",
+          bestSeller: false,
+          duration: "30 Min",
+          original: "₹999",
+          discounted: "₹499",
+          discountText: "Get (50% OFF) ₹499",
+        },
+      ],
+      reviewsList: [
+        {
+          avatar: "https://randomuser.me/api/portraits/men/24.jpg",
+          name: "Yashodivhara Bakliwal",
+          date: "28 Jun 20, 11:06 AM IST",
+          rating: "5.0★",
+          text: "Good session",
+        },
+      ],
+      topics: ["Engineering careers", "Data science"],
+      languages: ["English"],
+      education: [
+        {
+          logo: "https://upload.wikimedia.org/wikipedia/commons/6/6d/NIT_Trichy_Logo.png",
+          name: "NIT Trichy",
+          degree: "B.Tech, Computer Science",
+        },
+      ],
+    },
+    mehul: {
+      name: "Mehul Sampath",
+      avatar: "https://randomuser.me/api/portraits/men/12.jpg",
+      companyLogo: "",
+      rating: "5",
+      topMentor: false,
+      years: 1,
+      domain: "General",
+      menteeEngagements: 9,
+      reviews: 9,
+      companyText: "Product Marketing at Vodafone Idea | MBA Indian...",
+      about:
+        "Product marketing specialist with 1 year experience at Vodafone Idea.",
+      services: [
+        {
+          name: "Marketing Call",
+          bestSeller: false,
+          duration: "20 Min",
+          original: "₹299",
+          discounted: "₹199",
+          discountText: "Get (33% OFF) ₹199",
+        },
+      ],
+      reviewsList: [
+        {
+          avatar: "https://randomuser.me/api/portraits/women/25.jpg",
+          name: "Aoreya Mahajan",
+          date: "22 Apr 20, 02:43 PM IST",
+          rating: "5.0★",
+          text: "Really good feedback and guidance",
+        },
+      ],
+      topics: ["Marketing", "Product management"],
+      languages: ["English", "Hindi"],
+      education: [
+        {
+          logo: "https://upload.wikimedia.org/wikipedia/commons/2/2e/IIM_Ahmedabad_Logo.png",
+          name: "IIM Ahmedabad",
+          degree: "MBA, Business Management",
+        },
+      ],
+    },
+    riya: {
+      name: "Riya Shrivastava",
+      avatar: "https://randomuser.me/api/portraits/women/65.jpg",
+      companyLogo: "",
+      rating: "4.7",
+      topMentor: true,
+      years: 3,
+      domain: "Business And Management",
+      menteeEngagements: 218,
+      reviews: 218,
+      companyText: "Strategy - CEO's Office @SasDoctors | 3 years Wipro...",
+      about:
+        "Strategy professional with 3 years at Wipro and CEO's office at SasDoctors.",
+      services: [
+        {
+          name: "Strategy Call",
+          bestSeller: false,
+          duration: "25 Min",
+          original: "₹399",
+          discounted: "₹299",
+          discountText: "Get (25% OFF) ₹299",
+        },
+      ],
+      reviewsList: [
+        {
+          avatar: "https://randomuser.me/api/portraits/men/23.jpg",
+          name: "Mayank Kumar",
+          date: "04 Jul 20, 09:54 AM IST",
+          rating: "5.0★",
+          text: "Very helpful",
+        },
+      ],
+      topics: ["Strategy", "Career growth"],
+      languages: ["English", "Hindi"],
+      education: [
+        {
+          logo: "https://upload.wikimedia.org/wikipedia/commons/6/6e/Indian_School_of_Business_logo.png",
+          name: "ISB Hyderabad",
+          degree: "PGP, Management",
+        },
+      ],
+    },
+  };
+
+  function selectMentor(card, mentorId) {
+    document.querySelectorAll(".mentor-card").forEach(function (c) {
+      c.classList.remove("active");
+    });
+    card.classList.add("active");
+    loadMentorProfile(mentorId);
+  }
+
+  function loadMentorProfile(mentorId) {
+    const m = mentors[mentorId];
+    if (!m) return;
+    const profile = document.querySelector(".mentor-profile");
+    profile.querySelector(".profile-avatar").src = m.avatar;
+    profile.querySelector(".profile-avatar").alt = m.name;
+    profile.querySelector(".available-badge").innerHTML =
+      '<i class="fas fa-bolt me-1"></i>Available';
+    profile.querySelector(".rating-stars").textContent = `★ ${m.rating}`;
+    profile.querySelector("h3").textContent = m.name;
+    profile.querySelector(".company-text").textContent = m.companyText;
+    const stats = profile.querySelectorAll(".engagement-number");
+    stats[0].textContent = m.years;
+    stats[1].textContent = m.domain;
+    stats[2].textContent = m.menteeEngagements;
+    profile.querySelector(
+      ".text-muted.small"
+    ).textContent = `(${m.reviews} Reviews)`;
+    // Services
+    const servicesDiv = profile.querySelectorAll(".service-card");
+    servicesDiv.forEach((e) => e.remove());
+    const servicesSection = profile.querySelector(
+      '.section-title:contains("Services")'
+    ).parentNode;
+    m.services.forEach((s) => {
+      const div = document.createElement("div");
+      div.className = "service-card";
+      div.innerHTML = `<div class="service-badge">1:1 Call</div><div class="d-flex justify-content-between align-items-start"><div>${
+        s.bestSeller
+          ? `<div class='d-flex align-items-center gap-2 mb-2'><span class='best-seller-badge'>Best Seller</span></div>`
+          : ""
+      }<h6 class='mb-1'>${
+        s.name
+      }</h6><div class='text-muted small mb-2'><i class='fas fa-clock me-1'></i>${
+        s.duration
+      }</div><div class='d-flex align-items-center gap-2'><span class='price-original'>${
+        s.original
+      }</span><span class='price-discounted'>${
+        s.discounted
+      }</span><span class='discount-text'>${
+        s.discountText
+      }</span></div></div><div><button class='book-btn'>Book Now</button></div></div>`;
+      servicesSection.insertBefore(
+        div,
+        servicesSection.querySelector("button")
+      );
+    });
+    // About
+    profile.querySelector(".mt-4 p.text-muted").textContent = m.about;
+    // Reviews
+    const reviewItems = profile.querySelectorAll(".review-item");
+    reviewItems.forEach((e) => e.remove());
+    const reviewsSection = profile.querySelector(
+      '.section-title:contains("Reviews")'
+    ).parentNode;
+    m.reviewsList.forEach((r) => {
+      const div = document.createElement("div");
+      div.className = "review-item";
+      div.innerHTML = `<img src="${r.avatar}" alt="${r.name}" class="review-avatar" onerror="this.onerror=null;this.src='https://via.placeholder.com/32x32?text=No+Img';"><div class="flex-grow-1"><div class="d-flex align-items-center justify-content-between"><div><strong>${r.name}</strong><div class="text-muted small">${r.date}</div></div><span class="review-rating">${r.rating}</span></div><div class="text-muted small mt-1">${r.text}</div></div>`;
+      reviewsSection.insertBefore(div, reviewsSection.querySelector("button"));
+    });
+    // Topics
+    const topicTags = profile.querySelectorAll(".topic-tag");
+    topicTags.forEach((e) => e.remove());
+    const topicsSection = profile
+      .querySelector('.section-title:contains("Topics")')
+      .parentNode.querySelector(".d-flex.flex-wrap");
+    m.topics.forEach((t) => {
+      const span = document.createElement("span");
+      span.className = "topic-tag";
+      span.textContent = t;
+      topicsSection.appendChild(span);
+    });
+    // Languages
+    const langTags = profile.querySelectorAll(".lang-tag");
+    langTags.forEach((e) => e.remove());
+    const langsSection = profile
+      .querySelector('.section-title:contains("Fluent in")')
+      .parentNode.querySelector(".d-flex.flex-wrap");
+    m.languages.forEach((l) => {
+      const span = document.createElement("span");
+      span.className = "lang-tag";
+      span.textContent = l;
+      langsSection.appendChild(span);
+    });
+    // Education (clear and rebuild)
+    const eduSection = profile.querySelector(
+      '.section-title:contains("Education")'
+    ).parentNode;
+    // Remove all .edu-item children
+    eduSection.querySelectorAll(".edu-item").forEach((e) => e.remove());
+    m.education.forEach((e) => {
+      const div = document.createElement("div");
+      div.className = "edu-item";
+      div.innerHTML = `<img src="${e.logo}" alt="${e.name}" class="edu-logo" onerror="this.onerror=null;this.src='https://via.placeholder.com/32x32?text=No+Logo';"><div><div class="fw-bold">${e.name}</div><div class="text-muted small">${e.degree}</div></div>`;
+      eduSection.appendChild(div);
+    });
+  }
+
+  // Polyfill for :contains selector
+  (function () {
+    if (!Element.prototype.matches) return;
+    if (
+      Element.prototype.matches.call(
+        document.createElement("div"),
+        ':contains("test")'
+      )
+    )
+      return;
+    var contains = function (selector) {
+      var text = selector.match(/:contains\(("|')(.*?)(\1)\)/);
+      if (!text) return selector;
+      var base = selector.replace(/:contains\(("|').*?(\1)\)/, "");
+      return base;
+    };
+    Element.prototype.querySelector = (function (orig) {
+      return function (sel) {
+        if (sel.includes(":contains")) {
+          var text = sel.match(/:contains\(("|')(.*?)(\1)\)/)[2];
+          var base = sel.replace(/:contains\(("|').*?(\1)\)/, "");
+          var nodes = orig.call(this, base);
+          if (nodes && nodes.textContent && nodes.textContent.includes(text))
+            return nodes;
+          return null;
+        }
+        return orig.call(this, sel);
+      };
+    })(Element.prototype.querySelector);
+  })();
+
+  // View profile button
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector(".view-profile-btn").onclick = function () {
+      alert("Profile page coming soon!");
+    };
+    // View more services
+    document.querySelectorAll(".btn-link.text-primary").forEach(function (btn) {
+      btn.onclick = function () {
+        alert("More content coming soon!");
+      };
+    });
+    // Message/Call buttons
+    document.querySelector(".btn-outline-primary").onclick = function () {
+      alert("Messaging feature coming soon!");
+    };
+    document.querySelector(".btn-outline-success").onclick = function () {
+      alert("Calling feature coming soon!");
+    };
+    // Like button
+    document.querySelector(".btn-outline-secondary.me-2").onclick =
+      function () {
+        this.classList.toggle("active");
+        if (this.classList.contains("active")) {
+          this.querySelector("i").classList.remove("fa-heart");
+          this.querySelector("i").classList.add("fa-heart", "text-danger");
+        } else {
+          this.querySelector("i").classList.remove("text-danger");
+        }
+      };
+    // LinkedIn button
+    document.querySelector(".btn-outline-secondary:not(.me-2)").onclick =
+      function () {
+        window.open("https://www.linkedin.com", "_blank");
+      };
+  });
+</script>
+{% endblock %}

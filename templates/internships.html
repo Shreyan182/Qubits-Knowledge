@@ -1,0 +1,926 @@
+{% extends "base.html" %} {% block title %}Internships | Knowledge Platform
+{%endblock %} {% block extra_head %}
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: "Arial", sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* Header */
+  .header {
+    background: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff;
+  }
+
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+  }
+
+  .nav-toggle-bar {
+    width: 25px;
+    height: 3px;
+    background: #333;
+    margin: 4px 0;
+    transition: all 0.3s ease;
+  }
+
+  /* Hero Section */
+  .hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 80px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>')
+      repeat;
+    animation: float 20s infinite linear;
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateX(0) translateY(0) rotate(0deg);
+    }
+    100% {
+      transform: translateX(-50px) translateY(-50px) rotate(360deg);
+    }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    animation: fadeInUp 1s ease;
+  }
+
+  .hero p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    opacity: 0.9;
+    animation: fadeInUp 1s ease 0.2s both;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeInUp 1s ease 0.4s both;
+  }
+
+  .btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-primary {
+    background: #007bff;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: #0056b3;
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+  }
+
+  .btn-secondary:hover {
+    background: white;
+    color: #667eea;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Category Section */
+  .categories {
+    padding: 60px 0;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 50px;
+    color: #333;
+  }
+
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 30px;
+    margin-bottom: 50px;
+  }
+
+  .category-item {
+    text-align: center;
+    padding: 30px 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .category-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  .category-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+    background: #f0f8ff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #007bff;
+  }
+
+  .category-item h3 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  /* Recommended Section */
+  .recommended {
+    padding: 60px 0;
+    background: white;
+  }
+
+  .recommended-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+
+  .recommended-header h2 {
+    font-size: 1.8rem;
+    color: #333;
+  }
+
+  .for-you-badge {
+    background: #ffd700;
+    color: #333;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .internship-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+  }
+
+  .internship-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .internship-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  .card-header {
+    padding: 20px;
+    background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+    color: white;
+    position: relative;
+  }
+
+  .card-header.yellow {
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4a 100%);
+    color: #333;
+  }
+
+  .card-logo {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    background: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 12px;
+  }
+
+  .card-body {
+    padding: 20px;
+  }
+
+  .card-title {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  .card-company {
+    color: #666;
+    margin-bottom: 15px;
+  }
+
+  .card-stats {
+    display: flex;
+    justify-content: space-between;
+    color: #666;
+    font-size: 14px;
+  }
+
+  /* Internships Section */
+  .internships {
+    padding: 60px 0;
+    background: #f8f9fa;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+  }
+
+  .view-all {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .view-all:hover {
+    text-decoration: underline;
+  }
+
+  .internship-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+  }
+
+  .internship-card-small {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .internship-card-small:hover {
+    transform: translateY(-5px);
+  }
+
+  .card-header-small {
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    position: relative;
+  }
+
+  .card-header-small.pink {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+  }
+
+  .card-header-small.blue {
+    background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+  }
+
+  /* Mock Tests Section */
+  .mock-tests {
+    padding: 60px 0;
+    background: white;
+  }
+
+  .test-categories {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+
+  .test-category {
+    padding: 10px 20px;
+    background: #f0f0f0;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .test-category.active {
+    background: #007bff;
+    color: white;
+  }
+
+  .test-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+  }
+
+  .test-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .test-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .test-header {
+    padding: 30px;
+    background: linear-gradient(135deg, #8e44ad 0%, #3498db 100%);
+    color: white;
+    text-align: center;
+  }
+
+  .test-header.green {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  }
+
+  .test-header.orange {
+    background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+  }
+
+  .test-body {
+    padding: 20px;
+    text-align: center;
+  }
+
+  .test-title {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    color: #333;
+  }
+
+  .test-description {
+    color: #666;
+    margin-bottom: 20px;
+  }
+
+  .start-test {
+    background: #007bff;
+    color: white;
+    padding: 10px 25px;
+    border-radius: 25px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .start-test:hover {
+    background: #0056b3;
+  }
+
+  /* Companies Section */
+  .companies {
+    padding: 60px 0;
+    background: #f8f9fa;
+    text-align: center;
+  }
+
+  .company-logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+
+  .company-logo {
+    height: 60px;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .company-logo:hover {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+
+  /* Footer */
+  .footer {
+    background: #333;
+    color: white;
+    padding: 40px 0;
+    text-align: center;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .hero h1 {
+      font-size: 2rem;
+    }
+
+    .hero-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .category-grid {
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 20px;
+    }
+
+    .internship-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .internship-cards {
+      grid-template-columns: 1fr;
+    }
+
+    .test-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .company-logos {
+      gap: 30px;
+    }
+
+    .nav-icons {
+      display: none;
+    }
+
+    .recommended-header {
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .section-header {
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .test-categories {
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .container {
+      padding: 0 15px;
+    }
+
+    .hero {
+      padding: 60px 0;
+    }
+
+    .hero h1 {
+      font-size: 1.8rem;
+    }
+
+    .category-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .company-logos {
+      gap: 20px;
+    }
+
+    .company-logo {
+      height: 40px;
+    }
+  }
+</style>
+{% endblock %} {% block content %}
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <h1>Unlock Exposure</h1>
+      <p>
+        Apply to a plethora of hiring opportunities & work with your dream
+        companies!
+      </p>
+      <div class="hero-buttons">
+        <a href="/find-internships/" class="btn btn-primary"
+          >Find Internships</a
+        >
+        <a href="#" class="btn btn-secondary">Post Internships</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Categories -->
+<section class="categories">
+  <div class="container">
+    <div class="category-grid">
+      <div class="category-item">
+        <div class="category-icon">👥</div>
+        <h3>Human Resources</h3>
+      </div>
+      <div class="category-item">
+        <div class="category-icon">💻</div>
+        <h3>Software Development</h3>
+      </div>
+      <div class="category-item">
+        <div class="category-icon">📱</div>
+        <h3>Marketing</h3>
+      </div>
+      <div class="category-item">
+        <div class="category-icon">⚙</div>
+        <h3>Operations</h3>
+      </div>
+      <div class="category-item">
+        <div class="category-icon">💰</div>
+        <h3>Finance</h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Recommended Internships -->
+<section class="recommended">
+  <div class="container">
+    <div class="recommended-header">
+      <h2>Recommended Internships</h2>
+      <div class="for-you-badge">FOR YOU</div>
+    </div>
+    <p style="margin-bottom: 30px; color: #666">
+      Looking for the best of the best? Here's the top-rated internships by the
+      learners' community.
+    </p>
+
+    <div class="internship-grid">
+      <div class="internship-card">
+        <div class="card-header">
+          <div class="card-logo">CBEIC</div>
+          <div style="font-size: 12px; opacity: 0.8">In Office</div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Social Media Marketing Internship</h3>
+          <p class="card-company">
+            Chamber of Business and Entrepreneur (India) Council
+          </p>
+          <div class="card-stats">
+            <span>👥 261 Applied</span>
+            <span>📍 Delhi</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="internship-card">
+        <div class="card-header yellow">
+          <div class="card-logo">📱</div>
+          <div style="font-size: 12px; opacity: 0.8">In Office</div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Social Media Internship</h3>
+          <p class="card-company">PandaSwine</p>
+          <div class="card-stats">
+            <span>👥 191 Applied</span>
+            <span>💰 10k/Month - 12k/Month</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Internships -->
+<section class="internships">
+  <div class="container">
+    <div class="section-header">
+      <h2>Internships</h2>
+      <a href="#" class="view-all">View All →</a>
+    </div>
+    <p style="margin-bottom: 30px; color: #666">
+      Find the internships that fit your career aspirations.
+    </p>
+
+    <div class="internship-cards">
+      <div class="internship-card-small">
+        <div class="card-header-small">
+          <div class="card-logo">🖥</div>
+          <div style="font-size: 12px; opacity: 0.8">In Office</div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Software Engineer Internship</h3>
+          <p class="card-company">Microsoft</p>
+          <div class="card-stats">
+            <span>👁 52 Views</span>
+            <span>💰 ₹1.2L/Month</span>
+          </div>
+          <div class="card-stats">
+            <span>💰 ₹3.5k/Month</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="internship-card-small">
+        <div class="card-header-small pink">
+          <div class="card-logo">📱</div>
+          <div style="font-size: 12px; opacity: 0.8">WFH</div>
+          <div style="font-size: 12px; opacity: 0.8">🏃‍♀ Early Apply</div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Marketing Internship</h3>
+          <p class="card-company">MyCaptain</p>
+          <div class="card-stats">
+            <span>👥 4 Applied</span>
+            <span>💰 5k/Month - 10k/Month</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="internship-card-small">
+        <div class="card-header-small blue">
+          <div class="card-logo">🎓</div>
+          <div style="font-size: 12px; opacity: 0.8">WFH</div>
+          <div style="font-size: 12px; opacity: 0.8">🏃‍♀ Early Apply</div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">College Representative Internship</h3>
+          <p class="card-company">Jenda Corporate Entity</p>
+          <div class="card-stats">
+            <span>👥 3 Applied</span>
+            <span>💰 5k/Month - 10k/Month</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Job Roles -->
+<section class="internships" style="background: white">
+  <div class="container">
+    <div class="section-header">
+      <h2>Find The Right Role For You</h2>
+      <a href="#" class="view-all">View All →</a>
+    </div>
+    <p style="margin-bottom: 30px; color: #666">
+      Apply to roles matching your skills from 500+ trending options.
+    </p>
+
+    <div class="internship-cards">
+      <div class="internship-card-small">
+        <div class="card-body">
+          <h3 class="card-title">Data Analyst</h3>
+          <p class="card-company">570+ Openings</p>
+          <div class="company-logos" style="margin-top: 20px; gap: 10px">
+            <div
+              style="
+                width: 30px;
+                height: 30px;
+                background: #ff6b6b;
+                border-radius: 50%;
+              "
+            ></div>
+            <div
+              style="
+                width: 30px;
+                height: 30px;
+                background: #4ecdc4;
+                border-radius: 50%;
+              "
+            ></div>
+            <div
+              style="
+                width: 30px;
+                height: 30px;
+                background: #45b7d1;
+                border-radius: 50%;
+              "
+            ></div>
+            <div
+              style="
+                width: 30px;
+                height: 30px;
+                background: #f39c12;
+                border-radius: 50%;
+              "
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Mock Tests -->
+<section class="mock-tests">
+  <div class="container">
+    <div class="section-header">
+      <h2>AI-Powered Mock Tests</h2>
+      <a href="#" class="view-all">View All →</a>
+    </div>
+    <p style="margin-bottom: 30px; color: #666">
+      Master your concepts with AI-Powered full-length mock tests for 360°
+      preparation!
+    </p>
+
+    <div class="test-categories">
+      <div class="test-category active">Tech</div>
+      <div class="test-category">Management</div>
+      <div class="test-category">General</div>
+    </div>
+
+    <div class="test-grid">
+      <div class="test-card">
+        <div class="test-header">
+          <div style="font-size: 3rem; margin-bottom: 10px">👨‍💻</div>
+          <h3>Software Developer</h3>
+        </div>
+        <div class="test-body">
+          <h4 class="test-title">Software Developer</h4>
+          <p class="test-description">
+            Design, code, and maintain software solutions.
+          </p>
+          <a href="#" class="start-test">Start Test</a>
+        </div>
+      </div>
+
+      <div class="test-card">
+        <div class="test-header green">
+          <div style="font-size: 3rem; margin-bottom: 10px">📊</div>
+          <h3>Data Analyst</h3>
+        </div>
+        <div class="test-body">
+          <h4 class="test-title">Data Analyst</h4>
+          <p class="test-description">
+            Analyze and interpret complex data for insights.
+          </p>
+          <a href="#" class="start-test">Start Test</a>
+        </div>
+      </div>
+
+      <div class="test-card">
+        <div class="test-header orange">
+          <div style="font-size: 3rem; margin-bottom: 10px">🔧</div>
+          <h3>Backend Developer</h3>
+        </div>
+        <div class="test-body">
+          <h4 class="test-title">Backend Developer</h4>
+          <p class="test-description">
+            Develop and maintain server-side applications.
+          </p>
+          <a href="#" class="start-test">Start Test</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Companies -->
+<section class="companies">
+  <div class="container">
+    <h2>Top Companies Listing on Knowledge Platform</h2>
+    <p style="color: #666; margin-top: 10px">
+      Find jobs that fit your career aspirations.
+    </p>
+
+    <div class="company-logos">
+      <div style="font-size: 2rem; font-weight: bold; color: #e74c3c">
+        godrej
+      </div>
+      <div style="font-size: 2rem; font-weight: bold; color: #c0392b">
+        Mahindra Rise
+      </div>
+      <div style="font-size: 2rem; font-weight: bold; color: #663399">
+        FedEx
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %} {% block extra_js %}
+<script>
+  // Add smooth scrolling for navigation links
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+      e.preventDefault();
+      document.querySelector(this.getAttribute("href")).scrollIntoView({
+        behavior: "smooth",
+      });
+    });
+  });
+
+  // Add click functionality to category items
+  document.querySelectorAll(".category-item").forEach((item) => {
+    item.addEventListener("click", function () {
+      this.style.transform = "scale(0.95)";
+      setTimeout(() => {
+        this.style.transform = "translateY(-10px)";
+      }, 100);
+    });
+  });
+
+  // Add click functionality to test categories
+  document.querySelectorAll(".test-category").forEach((category) => {
+    category.addEventListener("click", function () {
+      document
+        .querySelectorAll(".test-category")
+        .forEach((c) => c.classList.remove("active"));
+      this.classList.add("active");
+    });
+  });
+
+  // Add hover effects to cards
+  document
+    .querySelectorAll(".internship-card, .internship-card-small, .test-card")
+    .forEach((card) => {
+      card.addEventListener("mouseenter", function () {
+        this.style.transform = "translateY(-5px)";
+      });
+
+      card.addEventListener("mouseleave", function () {
+        this.style.transform = "translateY(0)";
+      });
+    });
+
+  // Add floating animation to hero background
+  const hero = document.querySelector(".hero");
+  let animationId;
+
+  function animateHero() {
+    const time = Date.now() * 0.001;
+    const offsetX = Math.sin(time * 0.5) * 10;
+    const offsetY = Math.cos(time * 0.3) * 10;
+
+    hero.style.backgroundPosition = `${offsetX}px ${offsetY}px`;
+    animationId = requestAnimationFrame(animateHero);
+  }
+
+  animateHero();
+</script>
+{% endblock %}

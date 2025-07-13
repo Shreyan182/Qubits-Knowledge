@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register -Knowledge Platform</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: linear-gradient(135deg, #f2f1ed 0%, #dad8d3 100%);
+        min-height: 100vh;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .registration-container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin: 50px auto;
+        max-width: 900px;
+      }
+
+      .header-section {
+        background: linear-gradient(135deg, #dedb15 0%, #d8ca25 100%);
+        color: white;
+        padding: 40px;
+        text-align: center;
+      }
+
+      .header-section h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+
+      .header-section p {
+        opacity: 0.9;
+        font-size: 1.1rem;
+      }
+
+      .nav-pills .nav-link {
+        border-radius: 25px;
+        padding: 12px 25px;
+        margin: 0 5px;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+        font-weight: 600;
+      }
+
+      .nav-pills .nav-link:not(.active) {
+        background: #f8f9fa;
+        color: #6c757d;
+      }
+
+      .nav-pills .nav-link.active {
+        background: linear-gradient(135deg, #d77a7f 0%, #c87475 100%);
+        border-color: #667eea;
+        color: white;
+      }
+
+      .nav-pills .nav-link:hover:not(.active) {
+        background: #e9ecef;
+        transform: translateY(-2px);
+      }
+
+      .tab-content {
+        padding: 40px;
+      }
+
+      .form-floating {
+        margin-bottom: 20px;
+      }
+
+      .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        padding: 15px;
+        transition: all 0.3s ease;
+      }
+
+      .form-control:focus {
+        border-color: #f1567d;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+      }
+
+      .btn-register {
+        background: linear-gradient(135deg, #eb4646 0%, #de5296 100%);
+        border: none;
+        border-radius: 25px;
+        padding: 15px 40px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        width: 100%;
+      }
+
+      .btn-register:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+      }
+
+      .social-login {
+        text-align: center;
+        margin: 30px 0;
+      }
+
+      .social-btn {
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        padding: 12px 20px;
+        margin: 0 10px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        color: #6c757d;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .social-btn:hover {
+        border-color: #c7f328;
+        color: #ef51a5;
+        transform: translateY(-2px);
+      }
+
+      .divider {
+        text-align: center;
+        margin: 30px 0;
+        position: relative;
+      }
+
+      .divider::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: #e9ecef;
+      }
+
+      .divider span {
+        background: white;
+        color: #6c757d;
+      }
+
+      .feature-icon {
+        font-size: 1.5rem;
+        color: #eff1f7;
+        margin-bottom: 15px;
+      }
+
+      .login-link {
+        text-align: center;
+        margin-top: 30px;
+        padding-top: 30px;
+        border-top: 1px solid #e9ecef;
+      }
+
+      .login-link a {
+        color: #d3ef44;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .login-link a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="registration-container">
+        <!-- Header -->
+        <div class="header-section">
+          <h1><i class="fas fa-rocket me-3"></i>JOIN KNOWLEDGE PORTAL</h1>
+          <p>
+            Join knowledge portal and find your dream job or recruit talented
+            candidates
+          </p>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="px-4 pt-4">
+          <ul
+            class="nav nav-pills justify-content-center"
+            id="registrationTabs"
+            role="tablist"
+          >
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link active"
+                id="student-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#student-pane"
+                type="button"
+                role="tab"
+              >
+                <i class="fas fa-user-graduate me-2"></i>Student
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="college-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#college-pane"
+                type="button"
+                role="tab"
+              >
+                <i class="fas fa-university me-2"></i>College
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="recruiter-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#recruiter-pane"
+                type="button"
+                role="tab"
+              >
+                <i class="fas fa-briefcase me-2"></i>Recruiter
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="registrationContent">
+          <!-- Student Registration -->
+          <div
+            class="tab-pane fade show active"
+            id="student-pane"
+            role="tabpanel"
+          >
+            <form id="studentForm" method="post" action="{% url 'register' %}">
+              {% csrf_token %}
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="studentFirstName"
+                      placeholder="First Name"
+                      required
+                    />
+                    <label for="studentFirstName">First Name</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="studentLastName"
+                      placeholder="Last Name"
+                      required
+                    />
+                    <label for="studentLastName">Last Name</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-floating">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="studentEmail"
+                  placeholder="Email"
+                  required
+                />
+                <label for="studentEmail">Email Address</label>
+              </div>
+
+              <div class="form-floating">
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="studentPhone"
+                  placeholder="Phone"
+                  required
+                />
+                <label for="studentPhone">Phone Number</label>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <select class="form-control" id="studentCollege" required>
+                      <option value="">Select College</option>
+                      <option value="iit-delhi">IIT Delhi</option>
+                      <option value="iit-bombay">IIT Bombay</option>
+                      <option value="bits-pilani">BITS Pilani</option>
+                      <option value="nit-trichy">NIT Trichy</option>
+                      <option value="other">Other</option>
+                    </select>
+                    <label for="studentCollege">College/University</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <select class="form-control" id="studentYear" required>
+                      <option value="">Year of Study</option>
+                      <option value="1">1st Year</option>
+                      <option value="2">2nd Year</option>
+                      <option value="3">3rd Year</option>
+                      <option value="4">4th Year</option>
+                      <option value="graduate">Graduate</option>
+                    </select>
+                    <label for="studentYear">Year of Study</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-floating">
+                <input
+                  type="password"
+                  class="form-control"
+                  id="studentPassword"
+                  placeholder="Password"
+                  required
+                />
+                <label for="studentPassword">Password</label>
+              </div>
+
+              <div class="form-floating">
+                <input
+                  type="password"
+                  class="form-control"
+                  id="studentConfirmPassword"
+                  placeholder="Confirm Password"
+                  required
+                />
+                <label for="studentConfirmPassword">Confirm Password</label>
+              </div>
+
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="studentTerms"
+                  required
+                />
+                <label class="form-check-label" for="studentTerms">
+                  I agree to the
+                  <a href="#" class="text-decoration-none"
+                    >Terms & Conditions</a
+                  >
+                  and
+                  <a href="#" class="text-decoration-none">Privacy Policy</a>
+                </label>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-register">
+                <i class="fas fa-user-plus me-2"></i>Create Student Account
+              </button>
+            </form>
+          </div>
+
+          <!-- College Registration -->
+          <div class="tab-pane fade" id="college-pane" role="tabpanel">
+            <form id="collegeForm" method="post" action="{% url 'register' %}">
+              {% csrf_token %}
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="collegeName"
+                  placeholder="College Name"
+                  required
+                />
+                <label for="collegeName">College/University Name</label>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="collegeContactPerson"
+                      placeholder="Contact Person"
+                      required
+                    />
+                    <label for="collegeContactPerson"
+                      >Contact Person Name</label
+                    >
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="collegeDesignation"
+                      placeholder="Designation"
+                      required
+                    />
+                    <label for="collegeDesignation">Designation</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-floating">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="collegeEmail"
+                  placeholder="Official Email"
+                  required
+                />
+                <label for="collegeEmail">Official Email Address</label>
+              </div>
+
+              <div class="form-floating">
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="collegePhone"
+                  placeholder="Phone"
+                  required
+                />
+                <label for="collegePhone">Phone Number</label>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <select class="form-control" id="collegeState" required>
+                      <option value="">Select State</option>
+                      <option value="delhi">Delhi</option>
+                      <option value="maharashtra">Maharashtra</option>
+                      <option value="karnataka">Karnataka</option>
+                      <option value="tamil-nadu">Tamil Nadu</option>
+                      <option value="west-bengal">West Bengal</option>
+                    </select>
+                    <label for="collegeState">State</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="collegeCity"
+                      placeholder="City"
+                      required
+                    />
+                    <label for="collegeCity">City</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-floating">
+                <input
+                  type="url"
+                  class="form-control"
+                  id="collegeWebsite"
+                  placeholder="Website"
+                />
+                <label for="collegeWebsite">College Website (Optional)</label>
+              </div>
+
+              <div class="form-floating">
+                <input
+                  type="password"
+                  class="form-control"
+                  id="collegePassword"
+                  placeholder="Password"
+                  required
+                />
+                <label for="collegePassword">Password</label>
+              </div>
+
+              <div class="form-floating">
+                <input
+                  type="password"
+                  class="form-control"
+                  id="collegeConfirmPassword"
+                  placeholder="Confirm Password"
+                  required
+                />
+                <label for="collegeConfirmPassword">Confirm Password</label>
+              </div>
+
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="collegeTerms"
+                  required
+                />
+                <label class="form-check-label" for="collegeTerms">
+                  I agree to the
+                  <a href="#" class="text-decoration-none"
+                    >Terms & Conditions</a
+                  >
+                  and
+                  <a href="#" class="text-decoration-none">Privacy Policy</a>
+                </label>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-register">
+                <i class="fas fa-university me-2"></i>Register College
+              </button>
+            </form>
+          </div>
+
+          <!-- Recruiter Registration -->
+          <div class="tab-pane fade" id="recruiter-pane" role="tabpanel">
+            <form
+              id="recruiterForm"
+              method="post"
+              action="{% url 'register' %}"
+            >
+              {% csrf_token %}
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="recruiterFirstName"
+                      placeholder="First Name"
+                      required
+                    />
+                    <label for="recruiterFirstName">First Name</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="recruiterLastName"
+                      placeholder="Last Name"
+                      required
+                    />
+                    <label for="recruiterLastName">Last Name</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="companyName"
+                  placeholder="Company Name"
+                  required
+                />
+                <label for="companyName">Company Name</label>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="recruiterEmail"
+                      placeholder="Work Email"
+                      required
+                    />
+                    <label for="recruiterEmail">Work Email Address</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input
+                      type="tel"
+                      class="form-control"
+                      id="recruiterPhone"
+                      placeholder="Phone"
+                      required
+                    />
+                    <label for="recruiterPhone">Phone Number</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="recruiterDesignation"
+                  placeholder="Job Title"
+                  required
+                />
+                <label for="recruiterDesignation">Job Title/Designation</label>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <select class="form-control" id="companySize" required>
+                      <option value="">Company Size</option>
+                      <option value="1-10">1-10 employees</option>
+                      <option value="11-50">11-50 employees</option>
+                      <option value="51-200">51-200 employees</option>
+                      <option value="201-500">201-500 employees</option>
+                      <option value="500+">500+ employees</option>
+                    </select>
+                    <label for="companySize">Company Size</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <select class="form-control" id="industry" required>
+                      <option value="">Select Industry</option>
+                      <option value="technology">Technology</option>
+                      <option value="finance">Finance</option>
+                      <option value="healthcare">Healthcare</option>
+                      <option value="consulting">Consulting</option>
+                      <option value="manufacturing">Manufacturing</option>
+                      <option value="other">Other</option>
+                    </select>
+                    <label for="industry">Industry</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-floating">
+                <input
+                  type="password"
+                  class="form-control"
+                  id="recruiterPassword"
+                  placeholder="Password"
+                  required
+                />
+                <label for="recruiterPassword">Password</label>
+              </div>
+
+              <div class="form-floating">
+                <input
+                  type="password"
+                  class="form-control"
+                  id="recruiterConfirmPassword"
+                  placeholder="Confirm Password"
+                  required
+                />
+                <label for="recruiterConfirmPassword">Confirm Password</label>
+              </div>
+
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="recruiterTerms"
+                  required
+                />
+                <label class="form-check-label" for="recruiterTerms">
+                  I agree to the
+                  <a href="#" class="text-decoration-none"
+                    >Terms & Conditions</a
+                  >
+                  and
+                  <a href="#" class="text-decoration-none">Privacy Policy</a>
+                </label>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-register">
+                <i class="fas fa-briefcase me-2"></i>Create Recruiter Account
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Social Login Section -->
+        <div class="social-login px-4">
+          <div class="divider">
+            <span>Or continue with</span>
+          </div>
+          <a href="#" class="social-btn">
+            <i class="fab fa-google"></i>
+            Google
+          </a>
+          <a href="#" class="social-btn">
+            <i class="fab fa-linkedin"></i>
+            LinkedIn
+          </a>
+        </div>
+
+        <!-- Login Link -->
+        <div class="login-link px-4 pb-4">
+          <p class="mb-0">
+            Already have an account?
+            <a href="{% url 'login' %}">Sign in here</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Form validation and submission
+      document.addEventListener("DOMContentLoaded", function () {
+        const forms = document.querySelectorAll("form");
+
+        forms.forEach((form) => {
+          form.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            // Basic validation
+            const formData = new FormData(form);
+            const formType = form.id.replace("Form", "");
+
+            // Password confirmation check
+            const password = form.querySelector('input[type="password"]');
+            const confirmPassword = form.querySelector(
+              'input[type="password"]:last-of-type'
+            );
+
+            if (
+              password &&
+              confirmPassword &&
+              password.value !== confirmPassword.value
+            ) {
+              alert("Passwords do not match!");
+              return;
+            }
+
+            // Simulate successful registration
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML =
+              '<i class="fas fa-spinner fa-spin me-2"></i>Creating Account...';
+
+            setTimeout(() => {
+              alert(
+                `${
+                  formType.charAt(0).toUpperCase() + formType.slice(1)
+                } registration successful! You can now log in.`
+              );
+              form.reset();
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = originalText;
+            }, 2000);
+            setTimeout(() => {
+              window.location.href = "/login/";
+            }, 2000);
+          });
+        });
+
+        // Tab switching animation
+        const tabButtons = document.querySelectorAll('[data-bs-toggle="pill"]');
+        tabButtons.forEach((button) => {
+          button.addEventListener("shown.bs.tab", function (e) {
+            const targetPane = document.querySelector(
+              e.target.getAttribute("data-bs-target")
+            );
+            targetPane.style.opacity = "0";
+            targetPane.style.transform = "translateY(20px)";
+
+            setTimeout(() => {
+              targetPane.style.transition = "all 0.3s ease";
+              targetPane.style.opacity = "1";
+              targetPane.style.transform = "translateY(0)";
+            }, 50);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
