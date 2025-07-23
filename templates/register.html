@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register -Knowledge Platform</title>
+    <title>Register - Knowledge Platform</title>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
       rel="stylesheet"
@@ -174,6 +175,51 @@
       .login-link a:hover {
         text-decoration: underline;
       }
+
+      /* Error messages */
+      .errorlist {
+        list-style: none;
+        padding: 0;
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+      }
+
+      /*eye icon */
+      .password-toggle {
+        cursor: pointer;
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #6b7280;
+      }
+      .password-toggle:hover {
+        color: #f1567d;
+      }
+      .password-toggle.fa-eye-slash {
+        color: #f1567d;
+      }
+      .password-toggle.fa-eye {
+        color: #6b7280;
+      }
+      .password-toggle:focus {
+        outline: none;
+      }
+      .password-toggle:focus-visible {
+        box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.5);
+      }
+      .form-floating {
+        position: relative;
+      }
+      .form-floating input {
+        padding-right: 40px; /* Space for the icon */
+      }
+      .form-floating .password-toggle {
+        right: 15px; /* Adjust as needed */
+        top: 50%;
+        transform: translateY(-50%);
+      }
     </style>
   </head>
   <body>
@@ -244,17 +290,134 @@
           >
             <form id="studentForm" method="post" action="{% url 'register' %}">
               {% csrf_token %}
+              <input type="hidden" name="user_type" value="student" />
+
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-floating">
                     <input
                       type="text"
-                      class="form-control"
+                      class="form-control {% if form.name.errors %}is-invalid{% endif %}"
                       id="studentFirstName"
-                      placeholder="First Name"
+                      name="name"
+                      placeholder="Full Name"
+                      required
+                      value="{{ form.name.value|default:'' }}"
+                    />
+                    <label for="studentFirstName">Full Name</label>
+                    {% if form.name.errors %}
+                    <div class="invalid-feedback">{{ form.name.errors.0 }}</div>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input
+                      type="email"
+                      class="form-control {% if form.email.errors %}is-invalid{% endif %}"
+                      id="studentEmail"
+                      name="email"
+                      placeholder="Email"
+                      required
+                      value="{{ form.email.value|default:'' }}"
+                    />
+                    <label for="studentEmail">Email Address</label>
+                    {% if form.email.errors %}
+                    <div class="invalid-feedback">
+                      {{ form.email.errors.0 }}
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input
+                      type="tel"
+                      class="form-control"
+                      id="studentPhone"
+                      name="contact_number"
+                      placeholder="Phone"
                       required
                     />
-                    <label for="studentFirstName">First Name</label>
+                    <label for="studentPhone">Contact Number</label>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="location"
+                      name="location"
+                      placeholder="Location"
+                      required
+                    />
+                    <label for="location">Location</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input
+                      type="password"
+                      class="form-control {% if form.password1.errors %}is-invalid{% endif %}"
+                      id="studentPassword"
+                      name="password1"
+                      placeholder="Password"
+                      required
+                    />
+                    <label for="studentPassword">Password</label>
+                    <i
+                      class="fas fa-eye password-toggle"
+                      onclick="togglePassword('studentPassword', this)"
+                    ></i>
+                    {% if form.password1.errors %}
+                    <div class="invalid-feedback">
+                      {{ form.password1.errors.0 }}
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input
+                      type="password"
+                      class="form-control {% if form.password2.errors %}is-invalid{% endif %}"
+                      id="studentConfirmPassword"
+                      name="password2"
+                      placeholder="Confirm Password"
+                      required
+                    />
+                    <label for="studentConfirmPassword">Confirm Password</label>
+                    <i
+                      class="fas fa-eye password-toggle"
+                      onclick="togglePassword('studentConfirmPassword', this)"
+                    ></i>
+                    {% if form.password2.errors %}
+                    <div class="invalid-feedback">
+                      {{ form.password2.errors.0 }}
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="collegeName"
+                      name="college_name"
+                      placeholder="College Name"
+                      required
+                    />
+                    <label for="collegeName">College/University</label>
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -262,55 +425,25 @@
                     <input
                       type="text"
                       class="form-control"
-                      id="studentLastName"
-                      placeholder="Last Name"
+                      id="studentBranch"
+                      name="branch"
+                      placeholder="Branch/Department"
                       required
                     />
-                    <label for="studentLastName">Last Name</label>
+                    <label for="studentBranch">Branch/Department</label>
                   </div>
                 </div>
               </div>
-
-              <div class="form-floating">
-                <input
-                  type="email"
-                  class="form-control"
-                  id="studentEmail"
-                  placeholder="Email"
-                  required
-                />
-                <label for="studentEmail">Email Address</label>
-              </div>
-
-              <div class="form-floating">
-                <input
-                  type="tel"
-                  class="form-control"
-                  id="studentPhone"
-                  placeholder="Phone"
-                  required
-                />
-                <label for="studentPhone">Phone Number</label>
-              </div>
-
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-floating">
-                    <select class="form-control" id="studentCollege" required>
-                      <option value="">Select College</option>
-                      <option value="iit-delhi">IIT Delhi</option>
-                      <option value="iit-bombay">IIT Bombay</option>
-                      <option value="bits-pilani">BITS Pilani</option>
-                      <option value="nit-trichy">NIT Trichy</option>
-                      <option value="other">Other</option>
-                    </select>
-                    <label for="studentCollege">College/University</label>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-floating">
-                    <select class="form-control" id="studentYear" required>
-                      <option value="">Year of Study</option>
+                    <select
+                      class="form-select"
+                      id="studentYear"
+                      name="year_of_study"
+                      placeholder="Year of Study"
+                    >
+                      <option value="" disabled selected>Select Year</option>
                       <option value="1">1st Year</option>
                       <option value="2">2nd Year</option>
                       <option value="3">3rd Year</option>
@@ -320,30 +453,20 @@
                     <label for="studentYear">Year of Study</label>
                   </div>
                 </div>
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="studentSkills"
+                      name="skills"
+                      placeholder="Skills (comma separated)"
+                      required
+                    />
+                    <label for="studentSkills">Skills</label>
+                  </div>
+                </div>
               </div>
-
-              <div class="form-floating">
-                <input
-                  type="password"
-                  class="form-control"
-                  id="studentPassword"
-                  placeholder="Password"
-                  required
-                />
-                <label for="studentPassword">Password</label>
-              </div>
-
-              <div class="form-floating">
-                <input
-                  type="password"
-                  class="form-control"
-                  id="studentConfirmPassword"
-                  placeholder="Confirm Password"
-                  required
-                />
-                <label for="studentConfirmPassword">Confirm Password</label>
-              </div>
-
               <div class="form-check mb-3">
                 <input
                   class="form-check-input"
@@ -371,55 +494,83 @@
           <div class="tab-pane fade" id="college-pane" role="tabpanel">
             <form id="collegeForm" method="post" action="{% url 'register' %}">
               {% csrf_token %}
+              <input type="hidden" name="user_type" value="college" />
+
               <div class="form-floating">
                 <input
                   type="text"
-                  class="form-control"
+                  class="form-control {% if form.name.errors %}is-invalid{% endif %}"
                   id="collegeName"
+                  name="name"
                   placeholder="College Name"
                   required
                 />
                 <label for="collegeName">College/University Name</label>
+                {% if form.name.errors %}
+                <div class="invalid-feedback">{{ form.name.errors.0 }}</div>
+                {% endif %}
+              </div>
+
+              <div class="form-floating">
+                <input
+                  type="email"
+                  class="form-control {% if form.email.errors %}is-invalid{% endif %}"
+                  id="collegeEmail"
+                  name="email"
+                  placeholder="Official Email"
+                  required
+                />
+                <label for="collegeEmail">Official Email Address</label>
+                {% if form.email.errors %}
+                <div class="invalid-feedback">{{ form.email.errors.0 }}</div>
+                {% endif %}
               </div>
 
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-floating">
                     <input
-                      type="text"
-                      class="form-control"
-                      id="collegeContactPerson"
-                      placeholder="Contact Person"
+                      type="password"
+                      class="form-control {% if form.password1.errors %}is-invalid{% endif %}"
+                      id="collegePassword"
+                      name="password1"
+                      placeholder="Password"
                       required
                     />
-                    <label for="collegeContactPerson"
-                      >Contact Person Name</label
-                    >
+                    <label for="collegePassword">Password</label>
+                    <i
+                      class="fas fa-eye password-toggle"
+                      onclick="togglePassword('collegePassword', this)"
+                    ></i>
+                    {% if form.password1.errors %}
+                    <div class="invalid-feedback">
+                      {{ form.password1.errors.0 }}
+                    </div>
+                    {% endif %}
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-floating">
                     <input
-                      type="text"
-                      class="form-control"
-                      id="collegeDesignation"
-                      placeholder="Designation"
+                      type="password"
+                      class="form-control {% if form.password2.errors %}is-invalid{% endif %}"
+                      id="collegeConfirmPassword"
+                      name="password2"
+                      placeholder="Confirm Password"
                       required
                     />
-                    <label for="collegeDesignation">Designation</label>
+                    <label for="collegeConfirmPassword">Confirm Password</label>
+                    <i
+                      class="fas fa-eye password-toggle"
+                      onclick="togglePassword('collegeConfirmPassword', this)"
+                    ></i>
+                    {% if form.password2.errors %}
+                    <div class="invalid-feedback">
+                      {{ form.password2.errors.0 }}
+                    </div>
+                    {% endif %}
                   </div>
                 </div>
-              </div>
-
-              <div class="form-floating">
-                <input
-                  type="email"
-                  class="form-control"
-                  id="collegeEmail"
-                  placeholder="Official Email"
-                  required
-                />
-                <label for="collegeEmail">Official Email Address</label>
               </div>
 
               <div class="form-floating">
@@ -427,70 +578,11 @@
                   type="tel"
                   class="form-control"
                   id="collegePhone"
+                  name="contact_number"
                   placeholder="Phone"
                   required
                 />
-                <label for="collegePhone">Phone Number</label>
-              </div>
-
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-floating">
-                    <select class="form-control" id="collegeState" required>
-                      <option value="">Select State</option>
-                      <option value="delhi">Delhi</option>
-                      <option value="maharashtra">Maharashtra</option>
-                      <option value="karnataka">Karnataka</option>
-                      <option value="tamil-nadu">Tamil Nadu</option>
-                      <option value="west-bengal">West Bengal</option>
-                    </select>
-                    <label for="collegeState">State</label>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-floating">
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="collegeCity"
-                      placeholder="City"
-                      required
-                    />
-                    <label for="collegeCity">City</label>
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-floating">
-                <input
-                  type="url"
-                  class="form-control"
-                  id="collegeWebsite"
-                  placeholder="Website"
-                />
-                <label for="collegeWebsite">College Website (Optional)</label>
-              </div>
-
-              <div class="form-floating">
-                <input
-                  type="password"
-                  class="form-control"
-                  id="collegePassword"
-                  placeholder="Password"
-                  required
-                />
-                <label for="collegePassword">Password</label>
-              </div>
-
-              <div class="form-floating">
-                <input
-                  type="password"
-                  class="form-control"
-                  id="collegeConfirmPassword"
-                  placeholder="Confirm Password"
-                  required
-                />
-                <label for="collegeConfirmPassword">Confirm Password</label>
+                <label for="collegePhone">Contact Number</label>
               </div>
 
               <div class="form-check mb-3">
@@ -524,29 +616,41 @@
               action="{% url 'register' %}"
             >
               {% csrf_token %}
+              <input type="hidden" name="user_type" value="recruiter" />
+
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-floating">
                     <input
                       type="text"
-                      class="form-control"
-                      id="recruiterFirstName"
-                      placeholder="First Name"
+                      class="form-control {% if form.name.errors %}is-invalid{% endif %}"
+                      id="recruiterName"
+                      name="name"
+                      placeholder="Full Name"
                       required
                     />
-                    <label for="recruiterFirstName">First Name</label>
+                    <label for="recruiterName">Full Name</label>
+                    {% if form.name.errors %}
+                    <div class="invalid-feedback">{{ form.name.errors.0 }}</div>
+                    {% endif %}
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-floating">
                     <input
-                      type="text"
-                      class="form-control"
-                      id="recruiterLastName"
-                      placeholder="Last Name"
+                      type="email"
+                      class="form-control {% if form.email.errors %}is-invalid{% endif %}"
+                      id="recruiterEmail"
+                      name="email"
+                      placeholder="Work Email"
                       required
                     />
-                    <label for="recruiterLastName">Last Name</label>
+                    <label for="recruiterEmail">Work Email Address</label>
+                    {% if form.email.errors %}
+                    <div class="invalid-feedback">
+                      {{ form.email.errors.0 }}
+                    </div>
+                    {% endif %}
                   </div>
                 </div>
               </div>
@@ -556,37 +660,11 @@
                   type="text"
                   class="form-control"
                   id="companyName"
+                  name="company_name"
                   placeholder="Company Name"
                   required
                 />
                 <label for="companyName">Company Name</label>
-              </div>
-
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-floating">
-                    <input
-                      type="email"
-                      class="form-control"
-                      id="recruiterEmail"
-                      placeholder="Work Email"
-                      required
-                    />
-                    <label for="recruiterEmail">Work Email Address</label>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-floating">
-                    <input
-                      type="tel"
-                      class="form-control"
-                      id="recruiterPhone"
-                      placeholder="Phone"
-                      required
-                    />
-                    <label for="recruiterPhone">Phone Number</label>
-                  </div>
-                </div>
               </div>
 
               <div class="form-floating">
@@ -594,6 +672,7 @@
                   type="text"
                   class="form-control"
                   id="recruiterDesignation"
+                  name="designation"
                   placeholder="Job Title"
                   required
                 />
@@ -603,53 +682,50 @@
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-floating">
-                    <select class="form-control" id="companySize" required>
-                      <option value="">Company Size</option>
-                      <option value="1-10">1-10 employees</option>
-                      <option value="11-50">11-50 employees</option>
-                      <option value="51-200">51-200 employees</option>
-                      <option value="201-500">201-500 employees</option>
-                      <option value="500+">500+ employees</option>
-                    </select>
-                    <label for="companySize">Company Size</label>
+                    <input
+                      type="password"
+                      class="form-control {% if form.password1.errors %}is-invalid{% endif %}"
+                      id="recruiterPassword"
+                      name="password1"
+                      placeholder="Password"
+                      required
+                    />
+                    <label for="recruiterPassword">Password</label>
+                    <i
+                      class="fas fa-eye password-toggle"
+                      onclick="togglePassword('recruiterPassword', this)"
+                    ></i>
+                    {% if form.password1.errors %}
+                    <div class="invalid-feedback">
+                      {{ form.password1.errors.0 }}
+                    </div>
+                    {% endif %}
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-floating">
-                    <select class="form-control" id="industry" required>
-                      <option value="">Select Industry</option>
-                      <option value="technology">Technology</option>
-                      <option value="finance">Finance</option>
-                      <option value="healthcare">Healthcare</option>
-                      <option value="consulting">Consulting</option>
-                      <option value="manufacturing">Manufacturing</option>
-                      <option value="other">Other</option>
-                    </select>
-                    <label for="industry">Industry</label>
+                    <input
+                      type="password"
+                      class="form-control {% if form.password2.errors %}is-invalid{% endif %}"
+                      id="recruiterConfirmPassword"
+                      name="password2"
+                      placeholder="Confirm Password"
+                      required
+                    />
+                    <label for="recruiterConfirmPassword"
+                      >Confirm Password</label
+                    >
+                    <i
+                      class="fas fa-eye password-toggle"
+                      onclick="togglePassword('recruiterConfirmPassword', this)"
+                    ></i>
+                    {% if form.password2.errors %}
+                    <div class="invalid-feedback">
+                      {{ form.password2.errors.0 }}
+                    </div>
+                    {% endif %}
                   </div>
                 </div>
-              </div>
-
-              <div class="form-floating">
-                <input
-                  type="password"
-                  class="form-control"
-                  id="recruiterPassword"
-                  placeholder="Password"
-                  required
-                />
-                <label for="recruiterPassword">Password</label>
-              </div>
-
-              <div class="form-floating">
-                <input
-                  type="password"
-                  class="form-control"
-                  id="recruiterConfirmPassword"
-                  placeholder="Confirm Password"
-                  required
-                />
-                <label for="recruiterConfirmPassword">Confirm Password</label>
               </div>
 
               <div class="form-check mb-3">
@@ -681,7 +757,10 @@
           <div class="divider">
             <span>Or continue with</span>
           </div>
-          <a href="#" class="social-btn">
+          <a
+            href="{% url 'social:begin' 'google-oauth2' %}?user_type=student"
+            class="social-btn"
+          >
             <i class="fab fa-google"></i>
             Google
           </a>
@@ -703,57 +782,21 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
+      // Password toggle function
+      function togglePassword(fieldId, icon) {
+        const passwordField = document.getElementById(fieldId);
+        if (passwordField.type === "password") {
+          passwordField.type = "text";
+          icon.classList.remove("fa-eye");
+          icon.classList.add("fa-eye-slash");
+        } else {
+          passwordField.type = "password";
+          icon.classList.remove("fa-eye-slash");
+          icon.classList.add("fa-eye");
+        }
+      }
       // Form validation and submission
       document.addEventListener("DOMContentLoaded", function () {
-        const forms = document.querySelectorAll("form");
-
-        forms.forEach((form) => {
-          form.addEventListener("submit", function (e) {
-            e.preventDefault();
-
-            // Basic validation
-            const formData = new FormData(form);
-            const formType = form.id.replace("Form", "");
-
-            // Password confirmation check
-            const password = form.querySelector('input[type="password"]');
-            const confirmPassword = form.querySelector(
-              'input[type="password"]:last-of-type'
-            );
-
-            if (
-              password &&
-              confirmPassword &&
-              password.value !== confirmPassword.value
-            ) {
-              alert("Passwords do not match!");
-              return;
-            }
-
-            // Simulate successful registration
-            const submitBtn = form.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-
-            submitBtn.disabled = true;
-            submitBtn.innerHTML =
-              '<i class="fas fa-spinner fa-spin me-2"></i>Creating Account...';
-
-            setTimeout(() => {
-              alert(
-                `${
-                  formType.charAt(0).toUpperCase() + formType.slice(1)
-                } registration successful! You can now log in.`
-              );
-              form.reset();
-              submitBtn.disabled = false;
-              submitBtn.innerHTML = originalText;
-            }, 2000);
-            setTimeout(() => {
-              window.location.href = "/login/";
-            }, 2000);
-          });
-        });
-
         // Tab switching animation
         const tabButtons = document.querySelectorAll('[data-bs-toggle="pill"]');
         tabButtons.forEach((button) => {
@@ -769,6 +812,39 @@
               targetPane.style.opacity = "1";
               targetPane.style.transform = "translateY(0)";
             }, 50);
+          });
+        });
+
+        // Password confirmation check
+        const forms = document.querySelectorAll("form");
+        forms.forEach((form) => {
+          form.addEventListener("submit", function (e) {
+            const password = form.querySelector('input[name="password1"]');
+            const confirmPassword = form.querySelector(
+              'input[name="password2"]'
+            );
+
+            if (
+              password &&
+              confirmPassword &&
+              password.value !== confirmPassword.value
+            ) {
+              e.preventDefault();
+              alert("Passwords do not match!");
+              return false;
+            }
+
+            // Ensure terms are checked
+            const termsCheckbox = form.querySelector(
+              'input[type="checkbox"][required]'
+            );
+            if (termsCheckbox && !termsCheckbox.checked) {
+              e.preventDefault();
+              alert("Please agree to the terms and conditions");
+              return false;
+            }
+
+            return true;
           });
         });
       });
