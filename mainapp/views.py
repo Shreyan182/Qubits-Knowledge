@@ -1,56 +1,53 @@
-from urllib import request
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import logout as auth_logout, authenticate, login as auth_login
+from .models import CustomUser
+from django.conf import settings
+from django.db import IntegrityError
 
-def login(request):
-    # Example login logic (expand with real authentication as needed)
+def user_login(request):
     if request.method == 'POST':
-        username = request.POST.get('username', '').strip()
-        password = request.POST.get('password', '').strip()
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user_type = request.POST.get('user_type', 'student')
         user = authenticate(request, username=username, password=password)
-        if user is not None:
+        if user is not None and getattr(user, 'user_type', None) == user_type:
+            # If you have a user_type field, check it here. Otherwise, skip this check.
+            # Example: if hasattr(user, 'user_type') and user.user_type == user_type:
             auth_login(request, user)
             return redirect('home')
         else:
-            return render(request, 'login.html', {'error': 'Invalid credentials'})
+            return render(request, 'login.html', {
+                'error': 'Invalid credentials or user type.'
+            })
     return render(request, 'login.html')
 
 def logout(request):
     auth_logout(request)
     return redirect('login')
 
-def register(request):
+def register_view(request):
     if request.method == 'POST':
-        # Get fields from any form/tab
-        first_name = request.POST.get('first_name', '')
-        last_name = request.POST.get('last_name', '')
+        username = request.POST.get('email')
         email = request.POST.get('email')
         password = request.POST.get('password')
-        username = email  # Use email as username
+        user_type = request.POST.get('user_type')  # Not used unless you have a custom user model
 
-        if not email or not password:
-            return render(request, 'register.html', {'error': 'Email and password are required.'})
-
-        if User.objects.filter(username=username).exists():
-            return render(request, 'register.html', {'error': 'Email already registered.'})
-
-        user = User.objects.create_user(
-            username=email,  # Use email as username
+        user = CustomUser.objects.create_user(
+            username=username,
             email=email,
             password=password,
-            first_name=first_name,
-            last_name=last_name
+            user_type=user_type
         )
+        user.full_name = request.POST.get('full_name', '')
+        user.year_of_study = request.POST.get('year_of_study', '')
+        user.college_name = request.POST.get('college_name', '')
         user.save()
-        # Auto-login after registration
-        user = authenticate(request, username=email, password=password)
-        if user is not None:
-            auth_login(request, user)
-            return redirect('home')
-        else:
-            return render(request, 'register.html', {'error': 'Registration successful, but login failed.'})
+        user.backend = settings.AUTHENTICATION_BACKENDS[0]
+
+        auth_login(request, user)
+        return redirect('home')
     return render(request, 'register.html')
 
 def home(request):
