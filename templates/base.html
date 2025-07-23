@@ -54,13 +54,20 @@
         box-shadow: none;
       }
       .profile-link {
-        font-size: 1.7rem;
-        color: #4a5568;
-        transition: color 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        transition: transform 0.3s;
       }
-      .profile-link.active,
       .profile-link:hover {
-        color: #667eea;
+        transform: scale(1.1);
+      }
+      .user-icon-video {
+        width: 30px;
+        height: 30px;
+        object-fit: contain;
       }
       .container-main {
         max-width: 1200px;
@@ -83,6 +90,10 @@
         }
         .logo-text {
           font-size: 1.1rem;
+        }
+        .user-icon-video {
+          width: 24px;
+          height: 24px;
         }
       }
       /* Footer styles */
@@ -132,7 +143,6 @@
                 >Home</a
               >
             </li>
-
             <li class="nav-item">
               <a
                 class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}"
@@ -153,7 +163,13 @@
                 href="{% url 'profile' %}"
                 title="Profile"
               >
-                <i class="fas fa-user-circle"></i>
+                <video autoplay loop muted playsinline class="user-icon-video">
+                  <source
+                    src="https://cdn-icons-mp4.flaticon.com/512/11186/11186790.mp4"
+                    type="video/mp4"
+                  />
+                  Your browser does not support the video tag.
+                </video>
               </a>
             </li>
           </ul>
